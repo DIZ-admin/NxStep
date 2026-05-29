@@ -1,0 +1,6 @@
+{
+  "name": "NxStep - CS2 Player Portfolio",
+  "description": "Professional landing page and scouting dashboard for NxStep, Challenger-level CS2 Rifler, featuring stats, maps, experience, and an interactive AI scouter.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

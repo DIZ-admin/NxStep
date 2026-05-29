@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;650;700;800&family=JetBrains+Mono:wght@400;500;700;800&family=Space+Grotesk:wght@500;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+/* Custom glow animations for our tactical esports layout */
+@keyframes glow-amber {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+  }
+}
+
+.tactical-glow {
+  animation: glow-amber 4s infinite ease-in-out;
+}
+
+/* Hide scrollbars for the horizontal map select */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
