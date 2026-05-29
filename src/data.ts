@@ -269,7 +269,7 @@ export const nxstepPortfolioDataUK: PortfolioData = {
           name: "Активний контроль мідла",
           role: "Соло-борець",
           description: "Контролює мід, агресивно тримає приціл, збирає ранню інформацію та швидко бере ініціативу в перших дуелях.",
-          difficulty: "Висока"
+          difficulty: "High"
         }
       ],
       bgColor: "bg-emerald-950/45",
@@ -287,7 +287,7 @@ export const nxstepPortfolioDataUK: PortfolioData = {
           name: "Коннектор / Ротація на мід",
           role: "Активний плеймейкер",
           description: "Відповідає за збір інфи на ранніх таймінгах, ротується на шорт А Пленту або допомагає при жорсткому прийомі мідла з розкидкою.",
-          difficulty: "Висока"
+          difficulty: "High"
         }
       ],
       bgColor: "bg-amber-950/45",
@@ -305,7 +305,7 @@ export const nxstepPortfolioDataUK: PortfolioData = {
           name: "Контроль Вулиці / Yard",
           role: "Спеціаліст з простору",
           description: "Агресивно тримає вулицю, присікає переходи в сикрет і заходить на таймінговые фланги в середині раунду.",
-          difficulty: "Висока"
+          difficulty: "High"
         }
       ],
       bgColor: "bg-slate-900/40",
@@ -323,7 +323,7 @@ export const nxstepPortfolioDataUK: PortfolioData = {
           name: "Довжина / Catwalk",
           role: "Опенер / Анкор",
           description: "Агресивно бореться за лонг А під флешки сокомандників, забирає простір або відкочується для утримання Кетвелка.",
-          difficulty: "Середня"
+          difficulty: "Medium"
         }
       ],
       bgColor: "bg-yellow-950/40",
@@ -341,7 +341,7 @@ export const nxstepPortfolioDataUK: PortfolioData = {
           name: "Балкон і Брекет",
           role: "Анкор і опорник простору",
           description: "Присікає ранню агресію глибокою розкидкою або приймає агресивні кути всередині брекетів.",
-          difficulty: "Висока"
+          difficulty: "High"
         }
       ],
       bgColor: "bg-red-950/45",

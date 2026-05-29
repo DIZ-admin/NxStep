@@ -1,0 +1,95 @@
+import React, { useState } from "react";
+import { Eye } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+import { StatsDashboard } from "./StatsDashboard";
+import { MapsAndPositions } from "./MapsAndPositions";
+import { ExperienceTimeline } from "./ExperienceTimeline";
+import { MediaShowcase } from "./MediaShowcase";
+import { PortfolioData } from "../types";
+import { translations, Language } from "../translations";
+
+interface TabHubProps {
+  data: PortfolioData;
+  lang: Language;
+  onUpdateData: (newData: PortfolioData) => void;
+}
+
+export function TabHub({ data, lang, onUpdateData }: TabHubProps) {
+  const t = translations[lang];
+  const [activeTab, setActiveTab] = useState<"stats" | "maps" | "exp" | "media">("stats");
+
+  return (
+    <div id="ops-tab-hub" className="w-full bg-zinc-900/40 backdrop-blur-md border border-white/5 rounded-[32px] shadow-[inset_0_1px_0px_rgba(255,255,255,0.05)] p-4 sm:p-8 space-y-6 relative overflow-hidden">
+      
+      {/* Navigation Hub Strip */}
+      <div id="hub-actions-strip" className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-900 pb-4">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar w-full md:w-auto pb-2 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0">
+          <button
+            onClick={() => setActiveTab("stats")}
+            className={`px-4 py-3 rounded-xl text-xs sm:text-sm font-bold tracking-tight transition-all font-mono uppercase flex-shrink-0 whitespace-nowrap min-h-[44px] ${
+              activeTab === "stats"
+                ? "bg-orange-500 text-black shadow-md shadow-orange-500/10 font-black"
+                : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40"
+            }`}
+          >
+            {t.tabCombatStats}
+          </button>
+          <button
+            onClick={() => setActiveTab("maps")}
+            className={`px-4 py-3 rounded-xl text-xs sm:text-sm font-bold tracking-tight transition-all font-mono uppercase flex-shrink-0 whitespace-nowrap min-h-[44px] ${
+              activeTab === "maps"
+                ? "bg-orange-500 text-black shadow-md shadow-orange-500/10 font-black"
+                : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40"
+            }`}
+          >
+            {t.tabMapPool} ({data.maps.length})
+          </button>
+          <button
+            onClick={() => setActiveTab("exp")}
+            className={`px-4 py-3 rounded-xl text-xs sm:text-sm font-bold tracking-tight transition-all font-mono uppercase flex-shrink-0 whitespace-nowrap min-h-[44px] ${
+              activeTab === "exp"
+                ? "bg-orange-500 text-black shadow-md shadow-orange-500/10 font-black"
+                : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40"
+            }`}
+          >
+            {t.tabTrials}
+          </button>
+          <button
+            onClick={() => setActiveTab("media")}
+            className={`px-4 py-3 rounded-xl text-xs sm:text-sm font-bold tracking-tight transition-all font-mono uppercase flex-shrink-0 whitespace-nowrap min-h-[44px] ${
+              activeTab === "media"
+                ? "bg-orange-500 text-black shadow-md shadow-orange-500/10 font-black"
+                : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40"
+            }`}
+          >
+            {t.tabMedia}
+          </button>
+        </div>
+
+        <div className="flex items-center gap-1.5 text-xs font-mono text-zinc-550 select-none justify-start md:justify-end">
+          <Eye className="w-4 h-4 text-orange-500" />
+          <span>{t.scannedMetadata}</span>
+        </div>
+      </div>
+
+      {/* Animated Tab Layout Component */}
+      <div id="render-tab-outlet" className="relative overflow-hidden min-h-[460px]">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full h-full"
+          >
+            {activeTab === "stats" && <StatsDashboard data={data} onUpdateData={onUpdateData as any} lang={lang} />}
+            {activeTab === "maps" && <MapsAndPositions data={data} lang={lang} />}
+            {activeTab === "exp" && <ExperienceTimeline data={data} lang={lang} />}
+            {activeTab === "media" && <MediaShowcase data={data} lang={lang} />}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}
