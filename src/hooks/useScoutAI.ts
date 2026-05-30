@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { ChatMessage } from "../types";
 import { useToastContext } from "../components/ToastContext";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -33,7 +33,7 @@ export function useScoutAI() {
     }
   }, [messages]);
 
-  const handleSendMessage = async (customText?: string) => {
+  const handleSendMessage = useCallback(async (customText?: string) => {
     const textToSend = customText || inputMessage;
     if (!textToSend.trim() || isSending) return;
 
@@ -101,7 +101,7 @@ export function useScoutAI() {
     } finally {
       setIsSending(false);
     }
-  };
+  }, [inputMessage, isSending, messages, addToast, t]);
 
   return {
     messages,
