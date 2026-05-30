@@ -1,13 +1,14 @@
-import React, { useState } from "react";
-import { PortfolioData } from "../types";
-import { translations, Language } from "../translations";
-import { Landmark, AlertTriangle, Crosshair, HelpCircle, Swords, Map, MoveHorizontal } from "lucide-react";
+import { useState, memo } from "react";
+import { Landmark, Swords, Map, MoveHorizontal } from "lucide-react";
+import { usePortfolio } from "../contexts/PortfolioContext";
+import { useLanguage } from "../contexts/LanguageContext";
 
-export function MapsAndPositions({ data, lang = "en" }: { data: PortfolioData; lang?: Language }) {
+export const MapsAndPositions = memo(function MapsAndPositions() {
+  const { data } = usePortfolio();
+  const { t } = useLanguage();
   const [selectedMapIndex, setSelectedMapIndex] = useState(0);
   const mapDataList = data.maps;
   const currentMap = mapDataList[selectedMapIndex];
-  const t = translations[lang];
 
   return (
     <section id="maps-positions-container" aria-labelledby="maps-title" className="w-full flex flex-col gap-6 text-left">
@@ -200,4 +201,4 @@ export function MapsAndPositions({ data, lang = "en" }: { data: PortfolioData; l
       </div>
     </section>
   );
-}
+});

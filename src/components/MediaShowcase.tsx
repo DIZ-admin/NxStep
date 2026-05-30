@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { PortfolioData } from "../types";
-import { translations, Language } from "../translations";
+import { useState, memo } from "react";
 import { Film, PlayCircle, ExternalLink, Copy, Check, Tv, Database, MoveHorizontal } from "lucide-react";
+import { usePortfolio } from "../contexts/PortfolioContext";
+import { useLanguage } from "../contexts/LanguageContext";
 
-export function MediaShowcase({ data, lang = "en" }: { data: PortfolioData; lang?: Language }) {
-  const t = translations[lang];
+export const MediaShowcase = memo(function MediaShowcase() {
+  const { data } = usePortfolio();
+  const { t } = useLanguage();
   const media = data.media;
   const [activeMediaTab, setActiveMediaTab ] = useState<"highlights" | "vods" | "demos">("highlights");
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
@@ -172,4 +173,4 @@ export function MediaShowcase({ data, lang = "en" }: { data: PortfolioData; lang
       </div>
     </section>
   );
-}
+});

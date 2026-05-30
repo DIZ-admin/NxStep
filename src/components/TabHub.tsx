@@ -1,8 +1,9 @@
-import React, { useState, Suspense, lazy } from "react";
+import { useState, Suspense, lazy } from "react";
 import { Eye, MoveHorizontal, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { PortfolioData } from "../types";
-import { translations, Language } from "../translations";
+import { usePortfolio } from "../contexts/PortfolioContext";
+import { useLanguage } from "../contexts/LanguageContext";
+import { ErrorBoundary } from "./ErrorBoundary";
 
 // Lazy-load complex tab components to optimize initial bundle size
 const StatsDashboard = lazy(() => import("./StatsDashboard").then(m => ({ default: m.StatsDashboard })));
@@ -10,14 +11,9 @@ const MapsAndPositions = lazy(() => import("./MapsAndPositions").then(m => ({ de
 const ExperienceTimeline = lazy(() => import("./ExperienceTimeline").then(m => ({ default: m.ExperienceTimeline })));
 const MediaShowcase = lazy(() => import("./MediaShowcase").then(m => ({ default: m.MediaShowcase })));
 
-interface TabHubProps {
-  data: PortfolioData;
-  lang: Language;
-  onUpdateData: (newData: PortfolioData) => void;
-}
-
-export function TabHub({ data, lang, onUpdateData }: TabHubProps) {
-  const t = translations[lang];
+export function TabHub() {
+  const { data } = usePortfolio();
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<"stats" | "maps" | "exp" | "media">("stats");
 
   return (
@@ -28,8 +24,10 @@ export function TabHub({ data, lang, onUpdateData }: TabHubProps) {
         <MoveHorizontal className="w-3 h-3" /> Swipe
       </div>
       <div id="hub-actions-strip" className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-900 pb-4">
-        <nav aria-label="Portfolio Tabs" className="flex items-center gap-1.5 overflow-x-auto no-scrollbar w-full md:w-auto pb-2 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 snap-x snap-mandatory scroll-pl-4">
+        <nav role="tablist" aria-label="Portfolio Tabs" className="flex items-center gap-1.5 overflow-x-auto no-scrollbar w-full md:w-auto pb-2 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 snap-x snap-mandatory scroll-pl-4">
           <button
+            role="tab"
+            aria-selected={activeTab === "stats"}
             onClick={() => setActiveTab("stats")}
             className={`px-4 py-3 rounded-xl text-xs sm:text-sm font-bold tracking-tight transition-all font-mono uppercase flex-shrink-0 whitespace-nowrap min-h-[44px] snap-start ${
               activeTab === "stats"
@@ -40,6 +38,8 @@ export function TabHub({ data, lang, onUpdateData }: TabHubProps) {
             {t.tabCombatStats}
           </button>
           <button
+            role="tab"
+            aria-selected={activeTab === "maps"}
             onClick={() => setActiveTab("maps")}
             className={`px-4 py-3 rounded-xl text-xs sm:text-sm font-bold tracking-tight transition-all font-mono uppercase flex-shrink-0 whitespace-nowrap min-h-[44px] snap-start ${
               activeTab === "maps"
@@ -50,6 +50,8 @@ export function TabHub({ data, lang, onUpdateData }: TabHubProps) {
             {t.tabMapPool} ({data.maps.length})
           </button>
           <button
+            role="tab"
+            aria-selected={activeTab === "exp"}
             onClick={() => setActiveTab("exp")}
             className={`px-4 py-3 rounded-xl text-xs sm:text-sm font-bold tracking-tight transition-all font-mono uppercase flex-shrink-0 whitespace-nowrap min-h-[44px] snap-start ${
               activeTab === "exp"
@@ -60,6 +62,8 @@ export function TabHub({ data, lang, onUpdateData }: TabHubProps) {
             {t.tabTrials}
           </button>
           <button
+            role="tab"
+            aria-selected={activeTab === "media"}
             onClick={() => setActiveTab("media")}
             className={`px-4 py-3 rounded-xl text-xs sm:text-sm font-bold tracking-tight transition-all font-mono uppercase flex-shrink-0 whitespace-nowrap min-h-[44px] snap-start ${
               activeTab === "media"
@@ -78,7 +82,7 @@ export function TabHub({ data, lang, onUpdateData }: TabHubProps) {
       </div>
 
       {/* Animated Tab Layout Component */}
-      <div id="render-tab-outlet" className="relative overflow-hidden min-h-[460px]">
+      <div id="render-tab-outlet" role="tabpanel" className="relative overflow-hidden min-h-[460px]">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
@@ -88,17 +92,19 @@ export function TabHub({ data, lang, onUpdateData }: TabHubProps) {
             transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
             className="w-full h-full"
           >
-            <Suspense fallback={
-              <div className="flex flex-col items-center justify-center h-64 text-zinc-500">
-                <Loader2 className="w-8 h-8 animate-spin text-orange-500 mb-4" />
-                <span className="font-mono text-xs uppercase tracking-widest">{t.aiSubtitle || "Loading component..."}</span>
-              </div>
-            }>
-              {activeTab === "stats" && <StatsDashboard data={data} onUpdateData={onUpdateData as any} lang={lang} />}
-              {activeTab === "maps" && <MapsAndPositions data={data} lang={lang} />}
-              {activeTab === "exp" && <ExperienceTimeline data={data} lang={lang} />}
-              {activeTab === "media" && <MediaShowcase data={data} lang={lang} />}
-            </Suspense>
+            <ErrorBoundary fallback={<div className="p-6 bg-red-500/10 text-red-400 rounded-2xl border border-red-500/20"><p className="font-medium text-sm font-mono">Failed to load tab component.</p></div>}>
+              <Suspense fallback={
+                <div className="flex flex-col items-center justify-center h-64 text-zinc-500">
+                  <Loader2 className="w-8 h-8 animate-spin text-orange-500 mb-4" />
+                  <span className="font-mono text-xs uppercase tracking-widest">{t.aiSubtitle || "Loading component..."}</span>
+                </div>
+              }>
+                {activeTab === "stats" && <StatsDashboard />}
+                {activeTab === "maps" && <MapsAndPositions />}
+                {activeTab === "exp" && <ExperienceTimeline />}
+                {activeTab === "media" && <MediaShowcase />}
+              </Suspense>
+            </ErrorBoundary>
           </motion.div>
         </AnimatePresence>
       </div>

@@ -1,9 +1,9 @@
-import React from "react";
 import { Activity, ShieldCheck } from "lucide-react";
-import { translations, Language } from "../translations";
+import { useLanguage } from "../contexts/LanguageContext";
 
-export function TopBar({ lang, setLang }: { lang: Language; setLang: (lang: Language) => void }) {
-  const t = translations[lang];
+export function TopBar() {
+  const { lang, setLang, t } = useLanguage();
+  
   return (
     <nav id="top-teal-bar" aria-label="System status and language selection" className="w-full bg-zinc-900 border-b border-zinc-800/60 px-4 py-2 sm:px-6 md:px-8 flex items-center justify-between text-[11px] font-mono tracking-wider text-zinc-400 select-none">
       <div className="flex items-center gap-3">

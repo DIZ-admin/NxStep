@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { PortfolioData } from "../types";
-import { translations, Language } from "../translations";
-import { Shield, Users, Trophy, Award, Search, ArrowUpRight } from "lucide-react";
+import { useState, memo } from "react";
+import { Users, Trophy, Award, Search, ArrowUpRight } from "lucide-react";
+import { usePortfolio } from "../contexts/PortfolioContext";
+import { useLanguage } from "../contexts/LanguageContext";
 
-export function ExperienceTimeline({ data, lang = "en" }: { data: PortfolioData; lang?: Language }) {
-  const t = translations[lang];
+export const ExperienceTimeline = memo(function ExperienceTimeline() {
+  const { data } = usePortfolio();
+  const { t } = useLanguage();
   const experiences = data.experience;
   const [filter, setFilter] = useState<"all" | "team" | "trial" | "league">("all");
 
@@ -141,4 +142,4 @@ export function ExperienceTimeline({ data, lang = "en" }: { data: PortfolioData;
       </aside>
     </section>
   );
-}
+});

@@ -1,9 +1,10 @@
-import React from "react";
-import { PortfolioData } from "../types";
-import { translations, Language } from "../translations";
+import { usePortfolio } from "../contexts/PortfolioContext";
+import { useLanguage } from "../contexts/LanguageContext";
 
-export function Footer({ data, lang }: { data: PortfolioData; lang: Language }) {
-  const t = translations[lang];
+export function Footer() {
+  const { data } = usePortfolio();
+  const { t } = useLanguage();
+  
   return (
     <footer id="landing-footer" className="pt-12 pb-6 border-t border-zinc-900/80 flex flex-col md:flex-row justify-between items-center gap-6">
       <div className="text-center md:text-left space-y-1">

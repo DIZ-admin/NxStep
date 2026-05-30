@@ -1,10 +1,10 @@
-import React from "react";
-import { PortfolioData } from "../types";
-import { translations, Language } from "../translations";
-import { Globe, Shield, Calendar, Monitor, Link, Mail, MessageSquare, Award } from "lucide-react";
+import { Globe, Shield, Calendar, Monitor, Mail, Award } from "lucide-react";
+import { usePortfolio } from "../contexts/PortfolioContext";
+import { useLanguage } from "../contexts/LanguageContext";
 
-export function Header({ data, lang = "en" }: { data: PortfolioData; lang?: Language }) {
-  const t = translations[lang];
+export function Header() {
+  const { data } = usePortfolio();
+  const { t } = useLanguage();
 
   return (
     <header id="header-container" className="relative w-full rounded-[32px] overflow-hidden border border-white/5 bg-zinc-900/40 backdrop-blur-md shadow-[inset_0_1px_0px_rgba(255,255,255,0.05)]">
