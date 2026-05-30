@@ -24,11 +24,14 @@ export function StatsDashboard() {
     try {
       const result = await apiClient.syncFaceitStats("NxStep");
       if (result.success && result.stats) {
+        const cleanedStats = Object.fromEntries(
+          Object.entries(result.stats).filter(([_, v]) => v !== null && v !== undefined && v !== 0)
+        );
         onUpdateData({
           ...data,
           stats: {
             ...data.stats,
-            ...result.stats
+            ...cleanedStats
           }
         });
         addToast("success", "FACEIT Synced", "Successfully pulled the latest data.");

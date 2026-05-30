@@ -14,7 +14,7 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
   const { lang } = useLanguage();
 
   const [localData, setLocalData] = useState<PortfolioData>(() => {
-    const saved = localStorage.getItem("nxstep_portfolio_data");
+    const saved = localStorage.getItem("nxstep_portfolio_data_v2");
     if (saved) {
       try {
         return JSON.parse(saved);
@@ -27,23 +27,23 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
 
   const handleUpdateData = (newData: PortfolioData) => {
     setLocalData(newData);
-    localStorage.setItem("nxstep_portfolio_data", JSON.stringify(newData));
+    localStorage.setItem("nxstep_portfolio_data_v2", JSON.stringify(newData));
   };
 
   const activePortfolioData = useMemo(() => {
     const base = lang === "uk" ? nxstepPortfolioDataUK : nxstepPortfolioData;
+    
+    // Only apply local stats if they exist and are not null
+    const safeLocalStats = Object.fromEntries(
+      Object.entries(localData.stats || {}).filter(([_, v]) => v !== null && v !== undefined)
+    );
+
     return {
       ...base,
+      ...localData, // merge any other top level updates
       stats: {
         ...base.stats,
-        peakElo: localData.stats.peakElo,
-        faceitRating: localData.stats.faceitRating,
-        avgLobbyElo: localData.stats.avgLobbyElo,
-        adr: localData.stats.adr,
-        kr: localData.stats.kr,
-        avgKills: localData.stats.avgKills,
-        matchesPlayed: localData.stats.matchesPlayed,
-        recentForm: localData.stats.recentForm,
+        ...safeLocalStats
       }
     };
   }, [lang, localData]);

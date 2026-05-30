@@ -66,15 +66,21 @@ export interface FaceitParsedResult {
   segments: any[];
   stats: {
     peakElo: number | null;
+    currentElo?: number | null;
     faceitRating: number | null;
+    currentRating?: number | null;
     avgLobbyElo: number | null;
     kdRange: string | null;
     adr: number | null;
+    currentAdr?: number | null;
     kr: number | null;
     avgKills: number | null;
+    currentAvgKills?: number | null;
     hsRange: string | null;
+    currentHs?: string | null;
     consistencyRange: string | null;
     matchesPlayed: number | null;
+    currentMatches?: number | null;
     recentForm: string | null;
   };
 }
@@ -146,16 +152,22 @@ export async function fetchFaceitStats(username: string): Promise<FaceitParsedRe
       level: skillLevel,
       segments: statsObj.segments || [],
       stats: {
-        peakElo: currentElo,
-        faceitRating: kdRatio ? parseFloat((kdRatio + 0.08).toFixed(2)) : null,
+        peakElo: null,
+        currentElo: currentElo,
+        faceitRating: null,
+        currentRating: kdRatio ? parseFloat((kdRatio + 0.08).toFixed(2)) : null,
         avgLobbyElo: currentElo ? currentElo - 554 : null, // Not a perfect metric but better than hardcode
         kdRange: kdRatio ? `${(kdRatio - 0.01).toFixed(2)} - ${(kdRatio + 0.01).toFixed(2)}` : null,
-        adr: adr !== null && !isNaN(adr) ? adr : null,
+        adr: null,
+        currentAdr: adr !== null && !isNaN(adr) ? adr : null,
         kr: kdRatio ? parseFloat((kdRatio * 0.72).toFixed(2)) : null,
-        avgKills: avgKills !== null && !isNaN(avgKills) ? avgKills : null,
-        hsRange: hsRate ? (hsRate.includes("%") ? hsRate : `${hsRate}%`) : null,
+        avgKills: null,
+        currentAvgKills: avgKills !== null && !isNaN(avgKills) ? avgKills : null,
+        hsRange: null,
+        currentHs: hsRate ? (hsRate.includes("%") ? hsRate : `${hsRate}%`) : null,
         consistencyRange: null, 
-        matchesPlayed: matchesPlayed !== null && !isNaN(matchesPlayed) ? matchesPlayed : null,
+        matchesPlayed: null,
+        currentMatches: matchesPlayed !== null && !isNaN(matchesPlayed) ? matchesPlayed : null,
         recentForm: null
       }
     };
@@ -225,16 +237,22 @@ export async function fetchFaceitStats(username: string): Promise<FaceitParsedRe
       level: skillLevel,
       segments: statsObj.segments || [],
       stats: {
-        peakElo: currentElo,
-        faceitRating: kdRatio ? parseFloat((kdRatio + 0.08).toFixed(2)) : null,
+        peakElo: null,
+        currentElo: currentElo,
+        faceitRating: null,
+        currentRating: kdRatio ? parseFloat((kdRatio + 0.08).toFixed(2)) : null,
         avgLobbyElo: currentElo ? currentElo - 554 : null,
         kdRange: kdRatio ? `${(kdRatio - 0.01).toFixed(2)} - ${(kdRatio + 0.01).toFixed(2)}` : null,
-        adr: adr !== null && !isNaN(adr) ? adr : null,
+        adr: null,
+        currentAdr: adr !== null && !isNaN(adr) ? adr : null,
         kr: kdRatio ? parseFloat((kdRatio * 0.72).toFixed(2)) : null,
-        avgKills: avgKills !== null && !isNaN(avgKills) ? avgKills : null,
-        hsRange: hsRate ? (hsRate.includes("%") ? hsRate : `${hsRate}%`) : null,
+        avgKills: null,
+        currentAvgKills: avgKills !== null && !isNaN(avgKills) ? avgKills : null,
+        hsRange: null,
+        currentHs: hsRate ? (hsRate.includes("%") ? hsRate : `${hsRate}%`) : null,
         consistencyRange: null,
-        matchesPlayed: matchesPlayed !== null && !isNaN(matchesPlayed) ? matchesPlayed : null,
+        matchesPlayed: null,
+        currentMatches: matchesPlayed !== null && !isNaN(matchesPlayed) ? matchesPlayed : null,
         recentForm: null
       }
     };

@@ -25,15 +25,21 @@ export interface MapData {
 export interface PlayerStats {
   peakRank: string;
   peakElo: number;
+  currentElo?: number | null;
   faceitRating: number;
+  currentRating?: number | null;
   avgLobbyElo: number;
   kdRange: string;
   adr: number;
+  currentAdr?: number | null;
   kr: number;
   avgKills: number;
+  currentAvgKills?: number | null;
   hsRange: string;
+  currentHs?: string | null;
   consistencyRange: string;
   matchesPlayed: number;
+  currentMatches?: number | null;
   recentForm: string;
 }
 

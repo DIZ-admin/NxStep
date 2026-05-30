@@ -22,15 +22,21 @@ export const nxstepPortfolioData: PortfolioData = {
   stats: {
     peakRank: "Top 250 EU",
     peakElo: 3754,
+    currentElo: null,
     faceitRating: 1.27,
+    currentRating: null,
     avgLobbyElo: 3200,
     kdRange: "1.18 - 1.20",
     adr: 92,
+    currentAdr: null,
     kr: 0.86,
     avgKills: 19,
+    currentAvgKills: null,
     hsRange: "63% - 67%",
+    currentHs: null,
     consistencyRange: "83% - 85%",
     matchesPlayed: 1642,
+    currentMatches: null,
     recentForm: "+469 ELO"
   },
   strengths: [
@@ -230,15 +236,21 @@ export const nxstepPortfolioDataUK: PortfolioData = {
   stats: {
     peakRank: "Топ 250 Європи",
     peakElo: 3754,
+    currentElo: null,
     faceitRating: 1.27,
+    currentRating: null,
     avgLobbyElo: 3200,
     kdRange: "1.18 - 1.20",
     adr: 92,
+    currentAdr: null,
     kr: 0.86,
     avgKills: 19,
+    currentAvgKills: null,
     hsRange: "63% - 67%",
+    currentHs: null,
     consistencyRange: "83% - 85%",
     matchesPlayed: 1642,
+    currentMatches: null,
     recentForm: "+469 ELO"
   },
   strengths: [
