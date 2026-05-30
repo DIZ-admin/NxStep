@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ChatMessage } from "../types";
 import { translations, Language } from "../translations";
-import { Bot, User, Send, Sparkles, AlertTriangle, Cpu, Terminal } from "lucide-react";
+import { Bot, User, Send, Sparkles, AlertTriangle, Cpu, Terminal, MoveHorizontal } from "lucide-react";
 import { auth, db, handleFirestoreError } from "../firebase";
 import { signInAnonymously } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
@@ -263,17 +263,21 @@ export function ScoutAI({ lang = "en" }: { lang?: Language }) {
         </div>
 
         {/* Suggestion Chips */}
-        <div id="chat-suggestions-strip" className="px-5 py-2.5 bg-zinc-950 border-t border-zinc-900 overflow-x-auto flex items-center gap-2 no-scrollbar flex-shrink-0">
-          {suggestions.map((sug, sIdx) => (
-            <button
-              key={sIdx}
-              id={`sug-chip-${sIdx}`}
-              onClick={() => handleSendMessage(sug.text)}
-              className="flex-shrink-0 text-[10px] font-bold font-mono px-3 py-1.5 bg-zinc-900 hover:bg-zinc-850 active:bg-zinc-950 border border-zinc-800 hover:border-zinc-700 text-zinc-400 hover:text-white rounded-lg transition-all"
-            >
-              {sug.label}
-            </button>
-          ))}
+        <div id="chat-suggestions-wrapper" className="relative group/sug bg-zinc-950 border-t border-zinc-900">
+          <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-zinc-950 to-transparent pointer-events-none z-10" />
+          <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-zinc-950 to-transparent pointer-events-none z-10" />
+          <div id="chat-suggestions-strip" className="px-5 py-2.5 overflow-x-auto flex items-center gap-2 no-scrollbar flex-shrink-0 snap-x snap-mandatory relative z-0">
+            {suggestions.map((sug, sIdx) => (
+              <button
+                key={sIdx}
+                id={`sug-chip-${sIdx}`}
+                onClick={() => handleSendMessage(sug.text)}
+                className="flex-shrink-0 text-[10px] font-bold font-mono px-3 py-1.5 bg-zinc-900 hover:bg-zinc-850 active:bg-zinc-950 border border-zinc-800 hover:border-zinc-700 text-zinc-400 hover:text-white rounded-lg transition-all snap-start"
+              >
+                {sug.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Text Input area */}

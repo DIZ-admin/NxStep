@@ -24,7 +24,7 @@ export const translations = {
     tabTrials: "Trials & Teams",
     tabMedia: "Demos & VODs",
     aiTitle: "Interactive Scout Copilot",
-    aiSubtitle: "Ask questions about playstyle, adaptiveness, or setup transformation",
+    aiSubtitle: "AI can make mistakes. Please verify important information.",
     footerCopy: "NxStep © 2026 Competitive Portfolio",
     footerSub: "Verified in high-ELO European FACEIT Master leagues",
 
@@ -229,7 +229,7 @@ export const translations = {
     tabTrials: "Тести та команди",
     tabMedia: "Записи та кліпи",
     aiTitle: "Інтерактивний Скаут-Копілот",
-    aiSubtitle: "Поставте запитання про стиль гри, адаптивність або перехід з ноутбука на ПК",
+    aiSubtitle: "Штучний інтелект може помилятися. Перевіряйте важливу інформацію.",
     footerCopy: "NxStep © 2026 Портфоліо Гравця",
     footerSub: "Підтверджено в європейських FACEIT лігах високого рівня",
 

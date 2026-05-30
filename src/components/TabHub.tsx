@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Eye } from "lucide-react";
+import { Eye, MoveHorizontal } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { StatsDashboard } from "./StatsDashboard";
 import { MapsAndPositions } from "./MapsAndPositions";
@@ -22,11 +22,14 @@ export function TabHub({ data, lang, onUpdateData }: TabHubProps) {
     <div id="ops-tab-hub" className="w-full bg-zinc-900/40 backdrop-blur-md border border-white/5 rounded-[32px] shadow-[inset_0_1px_0px_rgba(255,255,255,0.05)] p-4 sm:p-8 space-y-6 relative overflow-hidden">
       
       {/* Navigation Hub Strip */}
+      <div className="md:hidden w-full flex justify-end items-center gap-1.5 text-[10px] text-zinc-500 font-mono tracking-widest uppercase -mt-2 mb-2 pr-2">
+        <MoveHorizontal className="w-3 h-3" /> Swipe
+      </div>
       <div id="hub-actions-strip" className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-900 pb-4">
-        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar w-full md:w-auto pb-2 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar w-full md:w-auto pb-2 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 snap-x snap-mandatory scroll-pl-4">
           <button
             onClick={() => setActiveTab("stats")}
-            className={`px-4 py-3 rounded-xl text-xs sm:text-sm font-bold tracking-tight transition-all font-mono uppercase flex-shrink-0 whitespace-nowrap min-h-[44px] ${
+            className={`px-4 py-3 rounded-xl text-xs sm:text-sm font-bold tracking-tight transition-all font-mono uppercase flex-shrink-0 whitespace-nowrap min-h-[44px] snap-start ${
               activeTab === "stats"
                 ? "bg-orange-500 text-black shadow-md shadow-orange-500/10 font-black"
                 : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40"
@@ -36,7 +39,7 @@ export function TabHub({ data, lang, onUpdateData }: TabHubProps) {
           </button>
           <button
             onClick={() => setActiveTab("maps")}
-            className={`px-4 py-3 rounded-xl text-xs sm:text-sm font-bold tracking-tight transition-all font-mono uppercase flex-shrink-0 whitespace-nowrap min-h-[44px] ${
+            className={`px-4 py-3 rounded-xl text-xs sm:text-sm font-bold tracking-tight transition-all font-mono uppercase flex-shrink-0 whitespace-nowrap min-h-[44px] snap-start ${
               activeTab === "maps"
                 ? "bg-orange-500 text-black shadow-md shadow-orange-500/10 font-black"
                 : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40"
@@ -46,7 +49,7 @@ export function TabHub({ data, lang, onUpdateData }: TabHubProps) {
           </button>
           <button
             onClick={() => setActiveTab("exp")}
-            className={`px-4 py-3 rounded-xl text-xs sm:text-sm font-bold tracking-tight transition-all font-mono uppercase flex-shrink-0 whitespace-nowrap min-h-[44px] ${
+            className={`px-4 py-3 rounded-xl text-xs sm:text-sm font-bold tracking-tight transition-all font-mono uppercase flex-shrink-0 whitespace-nowrap min-h-[44px] snap-start ${
               activeTab === "exp"
                 ? "bg-orange-500 text-black shadow-md shadow-orange-500/10 font-black"
                 : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40"
@@ -56,7 +59,7 @@ export function TabHub({ data, lang, onUpdateData }: TabHubProps) {
           </button>
           <button
             onClick={() => setActiveTab("media")}
-            className={`px-4 py-3 rounded-xl text-xs sm:text-sm font-bold tracking-tight transition-all font-mono uppercase flex-shrink-0 whitespace-nowrap min-h-[44px] ${
+            className={`px-4 py-3 rounded-xl text-xs sm:text-sm font-bold tracking-tight transition-all font-mono uppercase flex-shrink-0 whitespace-nowrap min-h-[44px] snap-start ${
               activeTab === "media"
                 ? "bg-orange-500 text-black shadow-md shadow-orange-500/10 font-black"
                 : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40"

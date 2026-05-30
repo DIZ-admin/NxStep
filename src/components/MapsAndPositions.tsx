@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { PortfolioData } from "../types";
 import { translations, Language } from "../translations";
-import { Landmark, AlertTriangle, Crosshair, HelpCircle, Swords, Map } from "lucide-react";
+import { Landmark, AlertTriangle, Crosshair, HelpCircle, Swords, Map, MoveHorizontal } from "lucide-react";
 
 export function MapsAndPositions({ data, lang = "en" }: { data: PortfolioData; lang?: Language }) {
   const [selectedMapIndex, setSelectedMapIndex] = useState(0);
@@ -12,26 +12,31 @@ export function MapsAndPositions({ data, lang = "en" }: { data: PortfolioData; l
   return (
     <div id="maps-positions-container" className="w-full flex flex-col gap-6 text-left">
       {/* Heading */}
-      <div>
-        <h2 id="maps-title" className="text-xl sm:text-2xl font-bold font-sans text-white flex items-center gap-2">
-          <Map className="w-5 h-5 text-orange-500" />
-          {t.mapsPoolRotational}
-        </h2>
-        <p className="text-xs text-zinc-400 mt-1 font-mono">
-          {t.mapsEliteTier}
-        </p>
+      <div className="flex items-start justify-between relative">
+        <div>
+          <h2 id="maps-title" className="text-xl sm:text-2xl font-bold font-sans text-white flex items-center gap-2">
+            <Map className="w-5 h-5 text-orange-500" />
+            {t.mapsPoolRotational}
+          </h2>
+          <p className="text-xs text-zinc-400 mt-1 font-mono">
+            {t.mapsEliteTier}
+          </p>
+        </div>
+        <div className="lg:hidden flex items-center gap-1.5 text-[10px] text-zinc-500 font-mono tracking-widest uppercase mt-2">
+          <MoveHorizontal className="w-3 h-3" /> Swipe
+        </div>
       </div>
 
       {/* Grid: Map Button Picker & Active Map Detail */}
       <div id="maps-main-grid" className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Map Grid Selectors (Left side) */}
-        <div id="map-selectors-col" className="lg:col-span-4 flex flex-row lg:flex-col overflow-x-auto lg:overflow-visible gap-3 pb-3 lg:pb-0 -mx-4 px-4 lg:mx-0 lg:px-0 no-scrollbar w-full">
+        <div id="map-selectors-col" className="lg:col-span-4 flex flex-row lg:flex-col overflow-x-auto lg:overflow-visible gap-3 pb-3 lg:pb-0 -mx-4 px-4 lg:mx-0 lg:px-0 no-scrollbar w-full snap-x snap-mandatory scroll-pl-4">
           {mapDataList.map((mapItem, idx) => (
             <button
               key={mapItem.name}
               id={`map-select-btn-${idx}`}
               onClick={() => setSelectedMapIndex(idx)}
-              className={`p-4 rounded-3xl border text-left transition-all duration-300 relative overflow-hidden group hover:scale-[1.03] flex flex-col justify-between flex-shrink-0 w-[200px] sm:w-[240px] lg:w-full min-h-[110px] min-w-0 shadow-[inset_0_1px_0px_rgba(255,255,255,0.05)] ${
+              className={`p-4 rounded-3xl border text-left transition-all duration-300 relative overflow-hidden group hover:scale-[1.03] flex flex-col justify-between flex-shrink-0 w-[200px] sm:w-[240px] lg:w-full min-h-[110px] min-w-0 shadow-[inset_0_1px_0px_rgba(255,255,255,0.05)] snap-start ${
                 idx === selectedMapIndex
                   ? "bg-zinc-900/60 backdrop-blur-md border-white/10 text-white shadow-lg ring-1 ring-white/10"
                   : "bg-white/5 hover:bg-white/10 border-white/5 text-zinc-400 hover:text-zinc-200"
