@@ -1,15 +1,14 @@
-import { useState, Suspense, lazy } from "react";
+import { useState, Suspense } from "react";
 import { Eye, MoveHorizontal, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { usePortfolio } from "../contexts/PortfolioContext";
 import { useLanguage } from "../contexts/LanguageContext";
 import { ErrorBoundary } from "./ErrorBoundary";
 
-// Lazy-load complex tab components to optimize initial bundle size
-const StatsDashboard = lazy(() => import("./StatsDashboard").then(m => ({ default: m.StatsDashboard })));
-const MapsAndPositions = lazy(() => import("./MapsAndPositions").then(m => ({ default: m.MapsAndPositions })));
-const ExperienceTimeline = lazy(() => import("./ExperienceTimeline").then(m => ({ default: m.ExperienceTimeline })));
-const MediaShowcase = lazy(() => import("./MediaShowcase").then(m => ({ default: m.MediaShowcase })));
+import { StatsDashboard } from "./StatsDashboard";
+import { MapsAndPositions } from "./MapsAndPositions";
+import { ExperienceTimeline } from "./ExperienceTimeline";
+import { MediaShowcase } from "./MediaShowcase";
 
 export function TabHub() {
   const { data } = usePortfolio();

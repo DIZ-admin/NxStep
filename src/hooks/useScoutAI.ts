@@ -65,9 +65,9 @@ export function useScoutAI() {
       // Clean fallback response of Scouting details in case environment API key is missing or system is initializing
       let simulatedReply = "";
       
-      const containsLaptop = textToSend.toLowerCase().includes("ноутбук") || textToSend.toLowerCase().includes("laptop") || textToSend.toLowerCase().includes("как он") || textToSend.toLowerCase().includes("як він") || textToSend.toLowerCase().includes("how did");
-      const containsMap = textToSend.toLowerCase().includes("ancient") || textToSend.toLowerCase().includes("mirage") || textToSend.toLowerCase().includes("роль на") || textToSend.toLowerCase().includes("позиции") || textToSend.toLowerCase().includes("позиції") || textToSend.toLowerCase().includes("tactical");
-      const containsAcademy = textToSend.toLowerCase().includes("academy") || textToSend.toLowerCase().includes("академ") || textToSend.toLowerCase().includes("готовность") || textToSend.toLowerCase().includes("готовність") || textToSend.toLowerCase().includes("сильные") || textToSend.toLowerCase().includes("сильні") || textToSend.toLowerCase().includes("readiness");
+      const containsLaptop = textToSend.toLowerCase().includes("ноутбук") || textToSend.toLowerCase().includes("laptop") || textToSend.toLowerCase().includes("як він") || textToSend.toLowerCase().includes("how did");
+      const containsMap = textToSend.toLowerCase().includes("ancient") || textToSend.toLowerCase().includes("mirage") || textToSend.toLowerCase().includes("позиції") || textToSend.toLowerCase().includes("tactical");
+      const containsAcademy = textToSend.toLowerCase().includes("academy") || textToSend.toLowerCase().includes("академ") || textToSend.toLowerCase().includes("готовність") || textToSend.toLowerCase().includes("сильні") || textToSend.toLowerCase().includes("readiness");
 
       if (containsLaptop) {
         simulatedReply = t.simLaptop;

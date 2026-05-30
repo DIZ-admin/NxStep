@@ -14,8 +14,13 @@ export async function applyMiddleware(app: express.Express) {
     console.log("Serving static production build from /dist...");
     const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
-    app.get("*", (_req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
+    app.get("*", (req, res) => {
+      // Do not serve index.html for assets or files with extensions to avoid MIME type errors
+      if (req.path.includes(".") || req.path.startsWith("/assets/") || req.path.startsWith("/api/")) {
+        res.status(404).send("Not Found");
+      } else {
+        res.sendFile(path.join(distPath, "index.html"));
+      }
     });
   }
 }

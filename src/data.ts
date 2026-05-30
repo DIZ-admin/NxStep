@@ -5,7 +5,7 @@ export const nxstepPortfolioData: PortfolioData = {
   tagline: "CS2 Rifler | FACEIT Challenger",
   age: 18,
   location: "Europe (EU)",
-  languages: ["English (C2)", "Russian (Native)", "Ukrainian (Native)"],
+  languages: ["English (C2)", "Ukrainian (Native)"],
   avatarUrl: "https://distribution.faceit-cdn.net/images/69118f24-2942-4935-bc9c-bbdbaea8e848.jpg",
   coverImageUrl: "https://distribution.faceit-cdn.net/images/d5762549-8ebf-4193-ab33-4b1c6095a797.jpg",
   overview: [

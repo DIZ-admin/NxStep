@@ -8,11 +8,9 @@ import { usePortfolio } from "../contexts/PortfolioContext";
 import { useLanguage } from "../contexts/LanguageContext";
 import { apiClient } from "../api";
 import { firebaseService } from "../services/firebaseService";
-import { collection, query, getDocs } from "firebase/firestore";
-import { db } from "../firebase";
 
 export function StatsDashboard() {
-  const { data, updateData: onUpdateData } = usePortfolio();
+  const { data, updateData: onUpdateData, reloadFromFirebase } = usePortfolio();
   const { t } = useLanguage();
   const s = data.stats;
   const { addToast } = useToastContext();
@@ -63,6 +61,7 @@ export function StatsDashboard() {
           // Sync was already completed in the last 24 hours!
           const hoursLeft = Math.ceil((oneDayMs - (now - lastSyncTime)) / (1000 * 60 * 60));
           addToast("success", "FACEIT Synced", "Base stats updated! Matches are already up to date. Next daily sync in " + hoursLeft + "h.");
+          await reloadFromFirebase();
           setIsSyncing(false);
           return;
         }
@@ -70,25 +69,10 @@ export function StatsDashboard() {
         try {
           addToast("info", "Checking database for existing match records...");
           
-          // Retrieve latest match date from Firestore
-          let latestMatchDate: number | undefined = undefined;
-          const q = query(collection(db, "faceitMatches"));
-          const snapshot = await getDocs(q);
+          let latestMatchDate = await firebaseService.getLatestFaceitMatchDate("NxStep");
           
-          let maxDate = 0;
-          snapshot.forEach((doc) => {
-            const m = doc.data();
-            if (m.username === "NxStep" && m.date && m.date > maxDate) {
-              maxDate = m.date;
-            }
-          });
-          
-          if (maxDate > 0) {
-            latestMatchDate = maxDate;
-            console.log(`[Dashboard] Found latest match date in Firestore: ${new Date(latestMatchDate).toISOString()}`);
-          }
-
           if (latestMatchDate) {
+            console.log(`[Dashboard] Found latest match date in Firestore: ${new Date(latestMatchDate).toISOString()}`);
             addToast("info", "Fetching daily incremental matches desde last backup...");
           } else {
             addToast("info", "Extracting full history matches and ELO progression data...");
@@ -110,6 +94,8 @@ export function StatsDashboard() {
           addToast("error", "History Sync Skipped", "Could not check incremental matches. Main stats remain active.");
         }
 
+        // Trigger portfolio refresh
+        await reloadFromFirebase();
         addToast("success", "FACEIT Synced", "Successfully pulled and recorded latest data.");
       } else {
         addToast("error", "FACEIT Sync Failed", result.error || "Unable to sync data");

@@ -1,6 +1,6 @@
 import { auth, db, handleFirestoreError, OperationType } from "../firebase";
 import { signInAnonymously } from "firebase/auth";
-import { doc, setDoc, serverTimestamp, writeBatch } from "firebase/firestore";
+import { doc, setDoc, serverTimestamp, writeBatch, collection, query, getDocs } from "firebase/firestore";
 
 export const firebaseService = {
   async initAnonymousSession() {
@@ -65,6 +65,27 @@ export const firebaseService = {
     } catch (e) {
       console.error("Failed to save Faceit stats to Firestore:", e);
       handleFirestoreError(e, OperationType.WRITE, `faceitStats/${username}`);
+    }
+  },
+
+  async getLatestFaceitMatchDate(username: string): Promise<number | undefined> {
+    try {
+      const q = query(collection(db, "faceitMatches"));
+      const snapshot = await getDocs(q);
+      
+      let maxDate = 0;
+      snapshot.forEach((doc) => {
+        const m = doc.data();
+        if (m.username === username && m.date && m.date > maxDate) {
+          maxDate = m.date;
+        }
+      });
+      
+      return maxDate > 0 ? maxDate : undefined;
+    } catch (e) {
+      console.error("Failed to get latest match date:", e);
+      handleFirestoreError(e, OperationType.GET, "faceitMatches");
+      return undefined;
     }
   },
 
