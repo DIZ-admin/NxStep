@@ -8,6 +8,7 @@ import { Footer } from "./components/Footer";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { motion } from "motion/react";
 import { useLanguage } from "./contexts/LanguageContext";
+import { firebaseService } from "./services/firebaseService";
 
 export default function App() {
   const { t } = useLanguage();
@@ -15,6 +16,11 @@ export default function App() {
   // Ensure the page always starts at the top
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  // Sign in anonymously for persistence
+  useEffect(() => {
+    firebaseService.initAnonymousSession();
   }, []);
 
   return (

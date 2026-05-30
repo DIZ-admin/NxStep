@@ -2,9 +2,11 @@ import { useState, useMemo, memo } from "react";
 import { TrendingUp } from "lucide-react";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 
+import { PortfolioData } from "../../types";
+
 interface HistoricalAscentPanelProps {
-  stats: any;
-  t: any;
+  stats: PortfolioData["stats"];
+  t: Record<string, string>;
 }
 
 export const HistoricalAscentPanel = memo(function HistoricalAscentPanel({ stats: s, t }: HistoricalAscentPanelProps) {
@@ -137,7 +139,7 @@ export const HistoricalAscentPanel = memo(function HistoricalAscentPanel({ stats
               strokeWidth={2.5}
               fillOpacity={1}
               fill="url(#eloGlowColor)"
-              dot={(props: any) => {
+              dot={(props: { cx?: number; cy?: number; index?: number }) => {
                 const { cx, cy, index } = props;
                 const isActive = index === activeTimelineIdx;
                 return (

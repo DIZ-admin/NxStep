@@ -33,11 +33,6 @@ export function useScoutAI() {
     }
   }, [messages]);
 
-  // Sign in anonymously for persistence
-  useEffect(() => {
-    firebaseService.initAnonymousSession();
-  }, []);
-
   const handleSendMessage = async (customText?: string) => {
     const textToSend = customText || inputMessage;
     if (!textToSend.trim() || isSending) return;
@@ -63,7 +58,7 @@ export function useScoutAI() {
       };
       setMessages((prev) => [...prev, aiMsg]);
       firebaseService.saveScoutSession(textToSend, result.reply);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Scout AI Client Caught Error:", err);
       // Clean fallback response of Scouting details in case environment API key is missing or system is initializing
       let simulatedReply = "";
@@ -83,14 +78,15 @@ export function useScoutAI() {
       }
 
       let displayError = "";
-      if (err.errorType === "MISSING_KEY") {
+      const errorObj = typeof err === "object" && err !== null ? err as { errorType?: string, message?: string } : { message: String(err) };
+      if (errorObj.errorType === "MISSING_KEY") {
         displayError = t.scoutErrPreview;
-      } else if (err.errorType === "SERVICE_UNAVAILABLE" || err.message?.includes("503") || err.message?.toLowerCase().includes("demand") || err.message?.toLowerCase().includes("unavailable")) {
+      } else if (errorObj.errorType === "SERVICE_UNAVAILABLE" || errorObj.message?.includes("503") || errorObj.message?.toLowerCase().includes("demand") || errorObj.message?.toLowerCase().includes("unavailable")) {
         displayError = t.scoutErr503;
-      } else if (err.errorType === "INVALID_KEY") {
+      } else if (errorObj.errorType === "INVALID_KEY") {
         displayError = t.scoutErrInvalid;
       } else {
-        displayError = `${t.scoutErrFallback} ${err.message || ""}`;
+        displayError = `${t.scoutErrFallback} ${errorObj.message || ""}`;
       }
       
       setErrorContext(displayError);

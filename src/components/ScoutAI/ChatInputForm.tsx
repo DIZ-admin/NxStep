@@ -5,7 +5,7 @@ interface ChatInputFormProps {
   setInputMessage: (msg: string) => void;
   isSending: boolean;
   handleSendMessage: (customText?: string) => void;
-  t: any;
+  t: Record<string, string>;
 }
 
 export function ChatInputForm({

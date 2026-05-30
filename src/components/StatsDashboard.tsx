@@ -38,9 +38,9 @@ export function StatsDashboard() {
       } else {
         addToast("error", "FACEIT Sync Failed", result.error || "Unable to sync data");
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error("Faceit Sync failed:", e);
-      addToast("error", "FACEIT Sync Failed", e.message || "Could not reach the sync server");
+      addToast("error", "FACEIT Sync Failed", e instanceof Error ? e.message : "Could not reach the sync server");
     } finally {
       setIsSyncing(false);
     }

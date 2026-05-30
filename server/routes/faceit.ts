@@ -8,11 +8,11 @@ faceitRouter.get("/faceit/sync", async (req, res) => {
   try {
     const data = await fetchFaceitStats(username);
     return res.json(data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[Faceit Sync Router] Error fetching stats:", error);
     return res.status(500).json({
       success: false,
-      error: error.message || "Unable to retrieve raw stats",
+      error: error instanceof Error ? error.message : "Unable to retrieve raw stats",
       hasApiKey: !!process.env.FACEIT_API_KEY,
       message: "Please configure a FACEIT_API_KEY in the application Secrets settings matching your developers.faceit.com token for maximum reliability."
     });

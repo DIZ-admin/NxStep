@@ -4,7 +4,7 @@ import { Award, Zap, Crosshair, Sparkles, TrendingUp } from "lucide-react";
 
 interface StatCardsProps {
   stats: PortfolioData["stats"];
-  t: any;
+  t: Record<string, string>;
 }
 
 export const StatCards = memo(function StatCards({ stats: s, t }: StatCardsProps) {

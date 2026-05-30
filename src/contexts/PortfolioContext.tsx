@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useMemo } from "react";
+import React, { createContext, useContext, useState, useMemo, useCallback } from "react";
 import { PortfolioData } from "../types";
 import { nxstepPortfolioData, nxstepPortfolioDataUK } from "../data";
 import { useLanguage } from "./LanguageContext";
@@ -25,10 +25,10 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
     return nxstepPortfolioData;
   });
 
-  const handleUpdateData = (newData: PortfolioData) => {
+  const handleUpdateData = useCallback((newData: PortfolioData) => {
     setLocalData(newData);
     localStorage.setItem("nxstep_portfolio_data_v2", JSON.stringify(newData));
-  };
+  }, []);
 
   const activePortfolioData = useMemo(() => {
     const base = lang === "uk" ? nxstepPortfolioDataUK : nxstepPortfolioData;
@@ -48,8 +48,10 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
     };
   }, [lang, localData]);
 
+  const providerValue = useMemo(() => ({ data: activePortfolioData, updateData: handleUpdateData }), [activePortfolioData, handleUpdateData]);
+
   return (
-    <PortfolioContext.Provider value={{ data: activePortfolioData, updateData: handleUpdateData }}>
+    <PortfolioContext.Provider value={providerValue}>
       {children}
     </PortfolioContext.Provider>
   );

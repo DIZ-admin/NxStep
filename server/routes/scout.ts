@@ -58,10 +58,10 @@ scoutRouter.post("/scout", scoutRateLimiter, async (req, res) => {
 
     const reply = response.text || "I was unable to analyze this data. Please review your inquiry.";
     return res.json({ reply });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("Scout API Error:", err);
     
-    const errStr = String(err.message || err);
+    const errStr = err instanceof Error ? String(err.message) : String(err);
     let errorType = "API_ERROR";
     
     if (
@@ -82,7 +82,7 @@ scoutRouter.post("/scout", scoutRateLimiter, async (req, res) => {
 
     return res.status(500).json({ 
       errorType,
-      error: err.message || "An internal error occurred during the scouting session." 
+      error: err instanceof Error ? err.message : "An internal error occurred during the scouting session." 
     });
   }
 });

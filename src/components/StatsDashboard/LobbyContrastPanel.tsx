@@ -1,9 +1,11 @@
 import { memo, useMemo } from "react";
 import { ShieldAlert, TrendingUp } from "lucide-react";
 
+import { PortfolioData } from "../../types";
+
 interface LobbyContrastPanelProps {
-  stats: any;
-  t: any;
+  stats: PortfolioData["stats"];
+  t: Record<string, string>;
 }
 
 export const LobbyContrastPanel = memo(function LobbyContrastPanel({ stats: s, t }: LobbyContrastPanelProps) {

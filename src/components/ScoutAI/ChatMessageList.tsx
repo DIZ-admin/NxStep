@@ -7,7 +7,7 @@ interface ChatMessageListProps {
   isSending: boolean;
   errorContext: string | null;
   feedRef: React.RefObject<HTMLDivElement | null>;
-  t: any;
+  t: Record<string, string>;
 }
 
 export function ChatMessageList({ messages, isSending, errorContext, feedRef, t }: ChatMessageListProps) {

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
 import { Language, translations } from "../translations";
 
 interface LanguageContextType {
@@ -19,10 +19,10 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     return (saved as Language) || "en";
   });
 
-  const setLang = (newLang: Language) => {
+  const setLang = useCallback((newLang: Language) => {
     localStorage.setItem("nxstep_portfolio_lang", newLang);
     setLangState(newLang);
-  };
+  }, []);
 
   useEffect(() => {
     document.documentElement.lang = lang === "uk" ? "uk" : "en";
@@ -30,8 +30,10 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const t = translations[lang];
 
+  const contextValue = useMemo(() => ({ lang, setLang, t }), [lang, setLang, t]);
+
   return (
-    <LanguageContext.Provider value={{ lang, setLang, t }}>
+    <LanguageContext.Provider value={contextValue}>
       {children}
     </LanguageContext.Provider>
   );
