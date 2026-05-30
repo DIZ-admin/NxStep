@@ -49,5 +49,18 @@ export const apiClient = {
       throw new ApiError("Failed to fetch Faceit stats", "SYNC_ERROR");
     }
     return result;
+  },
+
+  async fetchFaceitHistory(username: string, latestMatchDate?: number): Promise<{ success: boolean; username: string; matches: any[] }> {
+    let url = `/api/faceit/history?username=${encodeURIComponent(username)}`;
+    if (latestMatchDate !== undefined) {
+      url += `&latestMatchDate=${latestMatchDate}`;
+    }
+    const res = await fetch(url);
+    const result = await res.json();
+    if (!res.ok) {
+      throw new ApiError("Failed to fetch Faceit history", "SYNC_ERROR");
+    }
+    return result;
   }
 };

@@ -1,6 +1,6 @@
 import { auth, db, handleFirestoreError, OperationType } from "../firebase";
 import { signInAnonymously } from "firebase/auth";
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { doc, setDoc, serverTimestamp, writeBatch } from "firebase/firestore";
 
 export const firebaseService = {
   async initAnonymousSession() {
@@ -65,6 +65,47 @@ export const firebaseService = {
     } catch (e) {
       console.error("Failed to save Faceit stats to Firestore:", e);
       handleFirestoreError(e, OperationType.WRITE, `faceitStats/${username}`);
+    }
+  },
+
+  async saveFaceitMatches(username: string, matches: any[]) {
+    try {
+      const user = auth.currentUser;
+      if (!user) {
+        await this.initAnonymousSession();
+      }
+
+      console.log(`[Firebase Service] Saving ${matches.length} matches to Firestore for user: ${username}`);
+      
+      const chunkSize = 100;
+      for (let i = 0; i < matches.length; i += chunkSize) {
+        const chunk = matches.slice(i, i + chunkSize);
+        const batch = writeBatch(db);
+        
+        for (const match of chunk) {
+          const matchRef = doc(db, "faceitMatches", match.matchId);
+          const payload = {
+            matchId: match.matchId,
+            username: username,
+            date: Number(match.date) || Date.now(),
+            map: match.map || "de_mirage",
+            kills: Number(match.kills) || 0,
+            deaths: Number(match.deaths) || 0,
+            kd: Number(match.kd) || 0,
+            result: match.result === "W" || match.result === "w" ? "W" : "L",
+            elo: match.elo !== null && !isNaN(Number(match.elo)) ? Number(match.elo) : null,
+            stats: match.stats || {}
+          };
+          batch.set(matchRef, payload);
+         }
+         
+         await batch.commit();
+         console.log(`[Firebase Service] Committed chunk ${i / chunkSize + 1} (${chunk.length} matches)`);
+      }
+      console.log(`[Firebase Service] Successfully saved all ${matches.length} matches to Firestore`);
+    } catch (e) {
+      console.error("Failed to save Faceit matches to Firestore:", e);
+      handleFirestoreError(e, OperationType.WRITE, `faceitMatches`);
     }
   }
 };

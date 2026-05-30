@@ -8,7 +8,7 @@ service cloud.firestore {
     function isSignedIn() { return request.auth != null; }
     function incoming() { return request.resource.data; }
     function existing() { return resource.data; }
-    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-\\.:@/]+$'); }
 
     function isValidScoutSession(data) {
       return data.keys().hasAll(['userId', 'query', 'response', 'createdAt']) &&
@@ -23,13 +23,28 @@ service cloud.firestore {
       return data.keys().hasAll(['username', 'elo', 'level', 'avatarUrl', 'coverImageUrl', 'stats', 'segments', 'syncedAt']) &&
         data.keys().size() == 8 &&
         data.username is string && data.username.size() <= 100 &&
-        (data.elo == null || data.elo is int) &&
-        (data.level == null || data.level is int) &&
+        (data.elo == null || data.elo is int || data.elo is float) &&
+        (data.level == null || data.level is int || data.level is float) &&
         data.avatarUrl is string && data.avatarUrl.size() <= 2000 &&
         data.coverImageUrl is string && data.coverImageUrl.size() <= 2000 &&
         data.stats is map &&
         data.segments is list &&
         data.syncedAt is timestamp;
+    }
+
+    function isValidFaceitMatch(data) {
+      return data.keys().hasAll(['matchId', 'username', 'date', 'map', 'kills', 'deaths', 'kd', 'result', 'elo', 'stats']) &&
+        data.keys().size() == 10 &&
+        data.matchId is string && data.matchId.size() <= 128 &&
+        data.username is string && data.username.size() <= 100 &&
+        (data.date is int || data.date is float) &&
+        data.map is string && data.map.size() <= 100 &&
+        (data.kills is int || data.kills is float) &&
+        (data.deaths is int || data.deaths is float) &&
+        (data.kd is int || data.kd is float) &&
+        data.result is string && (data.result == 'W' || data.result == 'L') &&
+        (data.elo == null || data.elo is int || data.elo is float) &&
+        data.stats is map;
     }
 
     match /scoutSessions/{sessionId} {
@@ -42,12 +57,18 @@ service cloud.firestore {
 
     match /faceitStats/{username} {
       allow read: if true;
-      allow write: if isSignedIn() && isValidId(username) && isValidFaceitRecord(incoming()) && incoming().syncedAt == request.time;
+      allow write: if isValidId(username) && isValidFaceitRecord(incoming()) && incoming().syncedAt == request.time;
     }
 
     match /faceitHistory/{historyId} {
       allow read: if true;
-      allow create: if isSignedIn() && isValidId(historyId) && isValidFaceitRecord(incoming()) && incoming().syncedAt == request.time;
+      allow create: if isValidId(historyId) && isValidFaceitRecord(incoming()) && incoming().syncedAt == request.time;
+      allow delete, update: if false;
+    }
+
+    match /faceitMatches/{matchId} {
+      allow read, list: if true;
+      allow create: if isValidId(matchId) && isValidFaceitMatch(incoming());
       allow delete, update: if false;
     }
   }

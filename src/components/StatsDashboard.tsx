@@ -8,6 +8,8 @@ import { usePortfolio } from "../contexts/PortfolioContext";
 import { useLanguage } from "../contexts/LanguageContext";
 import { apiClient } from "../api";
 import { firebaseService } from "../services/firebaseService";
+import { collection, query, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
 
 export function StatsDashboard() {
   const { data, updateData: onUpdateData } = usePortfolio();
@@ -46,6 +48,64 @@ export function StatsDashboard() {
           result.stats,
           result.segments || []
         );
+
+        // Check last daily sync timestamp in localStorage
+        const LAST_SYNC_KEY = "faceit_last_sync_timestamp";
+        const lastSyncTimeStr = localStorage.getItem(LAST_SYNC_KEY);
+        const lastSyncTime = lastSyncTimeStr ? Number(lastSyncTimeStr) : 0;
+        const now = Date.now();
+        const oneDayMs = 24 * 60 * 60 * 1000;
+
+        if (lastSyncTime && (now - lastSyncTime < oneDayMs)) {
+          // Sync was already completed in the last 24 hours!
+          const hoursLeft = Math.ceil((oneDayMs - (now - lastSyncTime)) / (1000 * 60 * 60));
+          addToast("success", "FACEIT Synced", "Base stats updated! Matches are already up to date. Next daily sync in " + hoursLeft + "h.");
+          setIsSyncing(false);
+          return;
+        }
+
+        try {
+          addToast("info", "Checking database for existing match records...");
+          
+          // Retrieve latest match date from Firestore
+          let latestMatchDate: number | undefined = undefined;
+          const q = query(collection(db, "faceitMatches"));
+          const snapshot = await getDocs(q);
+          
+          let maxDate = 0;
+          snapshot.forEach((doc) => {
+            const m = doc.data();
+            if (m.username === "NxStep" && m.date && m.date > maxDate) {
+              maxDate = m.date;
+            }
+          });
+          
+          if (maxDate > 0) {
+            latestMatchDate = maxDate;
+            console.log(`[Dashboard] Found latest match date in Firestore: ${new Date(latestMatchDate).toISOString()}`);
+          }
+
+          if (latestMatchDate) {
+            addToast("info", "Fetching daily incremental matches desde last backup...");
+          } else {
+            addToast("info", "Extracting full history matches and ELO progression data...");
+          }
+
+          const historyRes = await apiClient.fetchFaceitHistory(result.username || "NxStep", latestMatchDate);
+          if (historyRes.success && historyRes.matches) {
+            if (historyRes.matches.length > 0) {
+              await firebaseService.saveFaceitMatches(result.username || "NxStep", historyRes.matches);
+              addToast("success", "Incremental Backup Complete", `Imported ${historyRes.matches.length} new matches to Firebase!`);
+            } else {
+              addToast("success", "Up to Date", "No new matches played since yesterday.");
+            }
+            // Retain sync timestamp
+            localStorage.setItem(LAST_SYNC_KEY, String(now));
+          }
+        } catch (histError) {
+          console.error("Incremental match sync failed:", histError);
+          addToast("error", "History Sync Skipped", "Could not check incremental matches. Main stats remain active.");
+        }
 
         addToast("success", "FACEIT Synced", "Successfully pulled and recorded latest data.");
       } else {

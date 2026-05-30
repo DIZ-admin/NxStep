@@ -63,6 +63,55 @@
         }
       },
       "required": ["username", "elo", "level", "stats", "syncedAt"]
+    },
+    "FaceitMatchRecord": {
+      "title": "Faceit Match Record",
+      "description": "Represents an individual historical match played by the player.",
+      "type": "object",
+      "properties": {
+        "matchId": {
+          "type": "string",
+          "description": "Unique identifier of the match."
+        },
+        "username": {
+          "type": "string",
+          "description": "The Faceit nickname of the player."
+        },
+        "date": {
+          "type": "number",
+          "description": "Timestamp on when the match took place."
+        },
+        "map": {
+          "type": "string",
+          "description": "Map name of the match."
+        },
+        "kills": {
+          "type": "number",
+          "description": "Number of kills in the match."
+        },
+        "deaths": {
+          "type": "number",
+          "description": "Number of deaths in the match."
+        },
+        "kd": {
+          "type": "number",
+          "description": "Kill-to-death ratio in the match."
+        },
+        "result": {
+          "type": "string",
+          "enum": ["W", "L"],
+          "description": "Match outcome: Win (W) or Loss (L)."
+        },
+        "elo": {
+          "type": "number",
+          "description": "The player's Elo rating at or after this match."
+        },
+        "stats": {
+          "type": "object",
+          "description": "Additional stats map."
+        }
+      },
+      "required": ["matchId", "username", "date", "map", "kills", "deaths", "kd", "result", "stats"]
     }
   },
   "firestore": {
@@ -77,6 +126,10 @@
     "/faceitHistory/{historyId}": {
       "schema": "FaceitSyncRecord",
       "description": "Historical log entries of synced stats over time to track rating progression."
+    },
+    "/faceitMatches/{matchId}": {
+      "schema": "FaceitMatchRecord",
+      "description": "Detailed records of individual historical FACEIT matches."
     }
   }
 }

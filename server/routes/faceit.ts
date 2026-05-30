@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { fetchFaceitStats } from "../services/faceitService";
+import { fetchFaceitStats, fetchFaceitHistory } from "../services/faceitService";
 
 export const faceitRouter = Router();
 
@@ -18,3 +18,25 @@ faceitRouter.get("/faceit/sync", async (req, res) => {
     });
   }
 });
+
+faceitRouter.get("/faceit/history", async (req, res) => {
+  const username = (req.query.username as string) || "NxStep";
+  const latestMatchDateStr = req.query.latestMatchDate as string;
+  const latestMatchDate = latestMatchDateStr ? Number(latestMatchDateStr) : undefined;
+  
+  try {
+    const data = await fetchFaceitHistory(username, latestMatchDate);
+    return res.json({
+      success: true,
+      username,
+      matches: data
+    });
+  } catch (error: unknown) {
+    console.error("[Faceit History Router] Error fetching history:", error);
+    return res.status(500).json({
+      success: false,
+      error: error instanceof Error ? error.message : "Unable to retrieve match history"
+    });
+  }
+});
+
