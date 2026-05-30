@@ -32,6 +32,9 @@ export function StatsDashboard() {
         );
         onUpdateData({
           ...data,
+          avatarUrl: result.avatarUrl || data.avatarUrl,
+          coverImageUrl: result.coverImageUrl || data.coverImageUrl,
+          segments: result.segments || data.segments || [],
           stats: {
             ...data.stats,
             ...cleanedStats

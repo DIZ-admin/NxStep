@@ -28,6 +28,7 @@ export interface PlayerStats {
   currentElo?: number | null;
   faceitRating: number;
   currentRating?: number | null;
+  currentKd?: number | null;
   avgLobbyElo: number;
   kdRange: string;
   adr: number;
@@ -78,6 +79,7 @@ export interface PortfolioData {
     highlights: { title: string; url: string }[];
     vods: { title: string; url: string }[];
   };
+  segments?: any[];
 }
 
 export interface ChatMessage {

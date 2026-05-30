@@ -69,6 +69,7 @@ export interface FaceitParsedResult {
     currentElo?: number | null;
     faceitRating: number | null;
     currentRating?: number | null;
+    currentKd?: number | null;
     avgLobbyElo: number | null;
     kdRange: string | null;
     adr: number | null;
@@ -150,6 +151,7 @@ async function fetchViaOfficialApi(username: string, apiKey: string): Promise<Fa
       currentElo: currentElo,
       faceitRating: null,
       currentRating: kdRatio ? parseFloat((kdRatio + 0.08).toFixed(2)) : null,
+      currentKd: kdRatio,
       avgLobbyElo: currentElo ? currentElo - 554 : null, // Not a perfect metric but better than hardcode
       kdRange: kdRatio ? `${(kdRatio - 0.01).toFixed(2)} - ${(kdRatio + 0.01).toFixed(2)}` : null,
       adr: null,
@@ -237,6 +239,7 @@ async function fetchViaFallbackApi(username: string): Promise<FaceitParsedResult
       currentElo: currentElo,
       faceitRating: null,
       currentRating: kdRatio ? parseFloat((kdRatio + 0.08).toFixed(2)) : null,
+      currentKd: kdRatio,
       avgLobbyElo: currentElo ? currentElo - 554 : null,
       kdRange: kdRatio ? `${(kdRatio - 0.01).toFixed(2)} - ${(kdRatio + 0.01).toFixed(2)}` : null,
       adr: null,

@@ -14,7 +14,7 @@ export const LobbyContrastPanel = memo(function LobbyContrastPanel({ stats: s, t
     return [
       { label: t.ratingLabel, player: r, average: 1.05, desc: t.ratingDesc, suffix: "" },
       { label: t.adrLabel, player: s.currentAdr ?? s.adr ?? 92.0, average: 78.5, desc: t.adrDesc, suffix: "" },
-      { label: t.kdRatioLabel, player: parseFloat((r - 0.08).toFixed(2)) || 1.19, average: 1.04, desc: t.kdRatioDesc, suffix: "" },
+      { label: t.kdRatioLabel, player: s.currentKd ?? (parseFloat((r - 0.08).toFixed(2)) || 1.19), average: 1.04, desc: t.kdRatioDesc, suffix: "" },
       { label: t.hsRateLabel, player: parseFloat(s.currentHs?.replace('%', '') ?? s.hsRange?.split('%')[0] ?? "65.0"), average: 50.2, desc: t.hsRateDesc, suffix: "%" },
       { label: t.kprLabel, player: s.kr ?? 0.86, average: 0.71, desc: t.kprDesc, suffix: "" },
       { label: t.consistencyLabel, player: parseFloat(s.consistencyRange?.split('%')[0] ?? "84.0"), average: 65.0, desc: t.consistencyDesc, suffix: "%" },

@@ -28,11 +28,11 @@ export class ApiError extends Error {
 }
 
 export const apiClient = {
-  async fetchScoutResponse(message: string, history: ChatMessage[]): Promise<ScoutApiResponse> {
+  async fetchScoutResponse(message: string, history: ChatMessage[], playerStats?: any, maps?: any[]): Promise<ScoutApiResponse> {
     const res = await fetch("/api/scout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message, history }),
+      body: JSON.stringify({ message, history, playerStats, maps }),
     });
 
     const result = await res.json();

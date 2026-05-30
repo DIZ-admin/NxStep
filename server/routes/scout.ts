@@ -1,6 +1,6 @@
 import { Router } from "express";
 import rateLimit from "express-rate-limit";
-import { getGeminiClient, systemInstruction } from "../services/geminiService";
+import { getGeminiClient, getDynamicSystemInstruction } from "../services/geminiService";
 
 export const scoutRouter = Router();
 
@@ -17,7 +17,7 @@ const scoutRateLimiter = rateLimit({
 
 scoutRouter.post("/scout", scoutRateLimiter, async (req, res) => {
   try {
-    const { message, history } = req.body;
+    const { message, history, playerStats, maps } = req.body;
     if (!message) {
       return res.status(400).json({ error: "Message is required." });
     }
@@ -51,7 +51,7 @@ scoutRouter.post("/scout", scoutRateLimiter, async (req, res) => {
       model: "gemini-2.5-flash",
       contents: formattedContents,
       config: {
-        systemInstruction: systemInstruction,
+        systemInstruction: getDynamicSystemInstruction(playerStats, maps),
         temperature: 0.75,
       },
     });

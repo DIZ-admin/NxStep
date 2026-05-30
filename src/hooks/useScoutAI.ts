@@ -4,9 +4,11 @@ import { useToastContext } from "../components/ToastContext";
 import { useLanguage } from "../contexts/LanguageContext";
 import { firebaseService } from "../services/firebaseService";
 import { apiClient } from "../api";
+import { usePortfolio } from "../contexts/PortfolioContext";
 
 export function useScoutAI() {
   const { lang, t } = useLanguage();
+  const { data } = usePortfolio();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
@@ -49,7 +51,7 @@ export function useScoutAI() {
     setIsSending(true);
 
     try {
-      const result = await apiClient.fetchScoutResponse(textToSend, messages);
+      const result = await apiClient.fetchScoutResponse(textToSend, messages, data.stats, data.maps);
 
       const aiMsg: ChatMessage = {
         sender: "ai",
@@ -101,7 +103,7 @@ export function useScoutAI() {
     } finally {
       setIsSending(false);
     }
-  }, [inputMessage, isSending, messages, addToast, t]);
+  }, [inputMessage, isSending, messages, addToast, t, data.stats, data.maps]);
 
   return {
     messages,

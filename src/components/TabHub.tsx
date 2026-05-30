@@ -1,15 +1,13 @@
-import { useState, Suspense, lazy } from "react";
-import { Eye, MoveHorizontal, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { Eye, MoveHorizontal } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { usePortfolio } from "../contexts/PortfolioContext";
 import { useLanguage } from "../contexts/LanguageContext";
 import { ErrorBoundary } from "./ErrorBoundary";
-
-// Lazy-load complex tab components to optimize initial bundle size
-const StatsDashboard = lazy(() => import("./StatsDashboard").then(m => ({ default: m.StatsDashboard })));
-const MapsAndPositions = lazy(() => import("./MapsAndPositions").then(m => ({ default: m.MapsAndPositions })));
-const ExperienceTimeline = lazy(() => import("./ExperienceTimeline").then(m => ({ default: m.ExperienceTimeline })));
-const MediaShowcase = lazy(() => import("./MediaShowcase").then(m => ({ default: m.MediaShowcase })));
+import { StatsDashboard } from "./StatsDashboard";
+import { MapsAndPositions } from "./MapsAndPositions";
+import { ExperienceTimeline } from "./ExperienceTimeline";
+import { MediaShowcase } from "./MediaShowcase";
 
 export function TabHub() {
   const { data } = usePortfolio();
@@ -93,17 +91,10 @@ export function TabHub() {
             className="w-full h-full"
           >
             <ErrorBoundary fallback={<div className="p-6 bg-red-500/10 text-red-400 rounded-2xl border border-red-500/20"><p className="font-medium text-sm font-mono">Failed to load tab component.</p></div>}>
-              <Suspense fallback={
-                <div className="flex flex-col items-center justify-center h-64 text-zinc-500">
-                  <Loader2 className="w-8 h-8 animate-spin text-orange-500 mb-4" />
-                  <span className="font-mono text-xs uppercase tracking-widest">{t.aiSubtitle || "Loading component..."}</span>
-                </div>
-              }>
-                {activeTab === "stats" && <StatsDashboard />}
-                {activeTab === "maps" && <MapsAndPositions />}
-                {activeTab === "exp" && <ExperienceTimeline />}
-                {activeTab === "media" && <MediaShowcase />}
-              </Suspense>
+              {activeTab === "stats" && <StatsDashboard />}
+              {activeTab === "maps" && <MapsAndPositions />}
+              {activeTab === "exp" && <ExperienceTimeline />}
+              {activeTab === "media" && <MediaShowcase />}
             </ErrorBoundary>
           </motion.div>
         </AnimatePresence>
