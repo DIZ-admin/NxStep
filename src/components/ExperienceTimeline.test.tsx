@@ -1,18 +1,11 @@
-import { render, screen, act } from '@testing-library/react';
+import { screen, act } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { ExperienceTimeline } from './ExperienceTimeline';
-import { PortfolioProvider } from '../contexts/PortfolioContext';
-import { LanguageProvider } from '../contexts/LanguageContext';
+import { renderWithProviders as render } from '../utils/test-utils';
 
 describe('ExperienceTimeline Component', () => {
   it('renders experience cards and filters them', () => {
-    render(
-      <LanguageProvider>
-        <PortfolioProvider>
-          <ExperienceTimeline />
-        </PortfolioProvider>
-      </LanguageProvider>
-    );
+    render(<ExperienceTimeline />);
 
     // Initial render should contain "all" including active teams
     expect(screen.getByText('tokyo54 (stand-in)')).toBeInTheDocument();

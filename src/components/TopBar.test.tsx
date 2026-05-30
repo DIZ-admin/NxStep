@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { TopBar } from './TopBar';
-import { LanguageProvider } from '../contexts/LanguageContext';
+import { renderWithProviders as render } from '../utils/test-utils';
 
 vi.mock('motion/react', () => ({
   motion: {
@@ -12,13 +12,20 @@ vi.mock('motion/react', () => ({
 }));
 
 describe('TopBar Component', () => {
-  it('renders top bar successfully', () => {
-    render(
-      <LanguageProvider>
-        <TopBar />
-      </LanguageProvider>
-    );
+  it('renders top bar successfully and changes language', () => {
+    localStorage.clear();
+    const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');
+
+    render(<TopBar />);
     expect(screen.getByText('EN')).toBeInTheDocument();
     expect(screen.getByText('UA')).toBeInTheDocument();
+
+    const uaBtn = screen.getByRole('button', { name: 'Switch language to Ukrainian' });
+    uaBtn.click();
+    expect(setItemSpy).toHaveBeenCalledWith('nxstep_portfolio_lang', 'uk');
+
+    const enBtn = screen.getByRole('button', { name: 'Switch language to English' });
+    enBtn.click();
+    expect(setItemSpy).toHaveBeenCalledWith('nxstep_portfolio_lang', 'en');
   });
 });

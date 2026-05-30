@@ -1,9 +1,21 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useScoutAI } from './useScoutAI';
-import { ToastProvider } from '../components/ToastContext';
-import { LanguageProvider } from '../contexts/LanguageContext';
+import { AllTheProviders as wrapper } from '../utils/test-utils';
 import { apiClient } from '../api';
+
+vi.mock('../firebase', () => ({
+  db: {},
+  auth: {},
+}));
+
+vi.mock('firebase/firestore', () => ({
+  getDoc: vi.fn().mockResolvedValue({ exists: () => false }),
+  getDocs: vi.fn().mockResolvedValue([]),
+  doc: vi.fn(),
+  collection: vi.fn(),
+  query: vi.fn(),
+}));
 
 vi.mock('../api', () => ({
   apiClient: {
@@ -21,14 +33,6 @@ describe('useScoutAI Hook', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
-
-  const wrapper = ({ children }: any) => (
-    <LanguageProvider>
-      <ToastProvider>
-        {children}
-      </ToastProvider>
-    </LanguageProvider>
-  );
 
   it('initializes with a greeting message', () => {
     const { result } = renderHook(() => useScoutAI(), { wrapper });

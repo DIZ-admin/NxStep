@@ -1,14 +1,29 @@
-import { render, screen, act } from '@testing-library/react';
+import { screen, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { StatsDashboard } from './StatsDashboard';
-import { PortfolioProvider } from '../contexts/PortfolioContext';
-import { LanguageProvider } from '../contexts/LanguageContext';
-import { ToastProvider } from './ToastContext';
+import { renderWithProviders as render } from '../utils/test-utils';
 import { apiClient } from '../api';
+
+vi.mock('../firebase', () => ({
+  db: {},
+  auth: {},
+}));
+
+vi.mock('firebase/firestore', () => ({
+  getDoc: vi.fn().mockResolvedValue({ exists: () => false }),
+  getDocs: vi.fn().mockResolvedValue([]),
+  doc: vi.fn(),
+  collection: vi.fn(),
+  query: vi.fn(),
+}));
 
 vi.mock('../api', () => ({
   apiClient: {
     syncFaceitStats: vi.fn(),
+    fetchFaceitHistory: vi.fn().mockResolvedValue({ success: true, matches: [] }),
+    fetchPortfolioData: vi.fn().mockResolvedValue({
+      stats: {}, maps: [], segments: [], experiences: [], medias: []
+    }),
   },
 }));
 
@@ -16,6 +31,8 @@ vi.mock('../services/firebaseService', () => ({
   firebaseService: {
     saveFaceitStats: vi.fn().mockResolvedValue(undefined),
     initAnonymousSession: vi.fn().mockResolvedValue(undefined),
+    getLatestFaceitMatchDate: vi.fn().mockResolvedValue(null),
+    saveFaceitMatches: vi.fn().mockResolvedValue(undefined),
   }
 }));
 
@@ -45,30 +62,22 @@ vi.mock('motion/react', () => ({
 
 
 describe('StatsDashboard Component', () => {
-  const wrapper = ({ children }: any) => (
-    <LanguageProvider>
-      <ToastProvider>
-        <PortfolioProvider>
-          {children}
-        </PortfolioProvider>
-      </ToastProvider>
-    </LanguageProvider>
-  );
-
   beforeEach(() => {
     vi.clearAllMocks();
+    localStorage.clear();
   });
 
   it('renders stats dashboard', () => {
-    render(<StatsDashboard />, { wrapper });
+    render(<StatsDashboard />);
     expect(screen.getByText(/Sync FACEIT/i)).toBeInTheDocument();
   });
 
   it('syncs faceit data successfully', async () => {
+    localStorage.setItem("faceit_last_sync_timestamp", String(Date.now()));
     const mockReponse = { success: true, stats: { matches: 500 } };
     (apiClient.syncFaceitStats as any).mockResolvedValueOnce(mockReponse);
 
-    render(<StatsDashboard />, { wrapper });
+    render(<StatsDashboard />);
     
     act(() => {
       screen.getByText('Sync FACEIT').click();
@@ -79,13 +88,13 @@ describe('StatsDashboard Component', () => {
     });
 
     // Toast appears
-    expect(screen.getByText('FACEIT Synced')).toBeInTheDocument();
+    expect(await screen.findByText('FACEIT Synced')).toBeInTheDocument();
   });
 
   it('handles faceit data sync error', async () => {
     (apiClient.syncFaceitStats as any).mockRejectedValueOnce(new Error('Network Error'));
 
-    render(<StatsDashboard />, { wrapper });
+    render(<StatsDashboard />);
     
     act(() => {
       screen.getByText('Sync FACEIT').click();
@@ -96,11 +105,11 @@ describe('StatsDashboard Component', () => {
     });
 
     // Toast appears
-    expect(screen.getByText('FACEIT Sync Failed')).toBeInTheDocument();
+    expect(await screen.findByText('FACEIT Sync Failed')).toBeInTheDocument();
   });
 
   it('toggles views between historical and lobby', () => {
-    render(<StatsDashboard />, { wrapper });
+    render(<StatsDashboard />);
     
     act(() => {
       screen.getByRole('button', { name: /Lobby Contrast/i }).click();

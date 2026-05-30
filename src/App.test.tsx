@@ -1,9 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import App from './App';
-import { PortfolioProvider } from './contexts/PortfolioContext';
-import { LanguageProvider } from './contexts/LanguageContext';
-import { ToastProvider } from './components/ToastContext';
+import { renderWithProviders as render } from './utils/test-utils';
 import { firebaseService } from './services/firebaseService';
 
 vi.mock('./services/firebaseService', () => ({
@@ -44,15 +42,7 @@ describe('App Component', () => {
   it('renders the complete application', () => {
     window.scrollTo = vi.fn();
     
-    render(
-      <LanguageProvider>
-        <ToastProvider>
-          <PortfolioProvider>
-            <App />
-          </PortfolioProvider>
-        </ToastProvider>
-      </LanguageProvider>
-    );
+    render(<App />);
 
     expect(screen.getByText('EN')).toBeInTheDocument();
     expect(screen.getByText(/FACEIT VERIFIED/i)).toBeInTheDocument();

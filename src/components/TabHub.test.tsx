@@ -1,8 +1,7 @@
-import { render, screen, act } from '@testing-library/react';
+import { screen, act } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { TabHub } from './TabHub';
-import { PortfolioProvider } from '../contexts/PortfolioContext';
-import { LanguageProvider } from '../contexts/LanguageContext';
+import { renderWithProviders as render } from '../utils/test-utils';
 
 vi.mock('motion/react', () => ({
   __esModule: true,
@@ -14,13 +13,7 @@ vi.mock('motion/react', () => ({
 
 describe('TabHub Component', () => {
   it('renders tabs and changes them', async () => {
-    render(
-      <LanguageProvider>
-        <PortfolioProvider>
-          <TabHub />
-        </PortfolioProvider>
-      </LanguageProvider>
-    );
+    render(<TabHub />);
 
     // Initial tab
     expect(screen.getByRole('tab', { name: /COMBAT STATS/i })).toBeInTheDocument();

@@ -1,8 +1,8 @@
-import { render, screen, act } from '@testing-library/react';
+import { screen, act } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { ScoutAI } from './ScoutAI';
 import { useScoutAI } from '../hooks/useScoutAI';
-import { LanguageProvider } from '../contexts/LanguageContext';
+import { renderWithProviders as render } from '../utils/test-utils';
 
 vi.mock('../hooks/useScoutAI');
 
@@ -19,11 +19,7 @@ describe('ScoutAI Component', () => {
       t: { scoutAnalyst: 'AI Scout', scoutSubtitle: 'Subtitle' }
     });
 
-    render(
-      <LanguageProvider>
-        <ScoutAI />
-      </LanguageProvider>
-    );
+    render(<ScoutAI />);
 
     expect(screen.getByText('AI Scout')).toBeInTheDocument();
     expect(screen.getByText('Hello')).toBeInTheDocument();
@@ -42,11 +38,7 @@ describe('ScoutAI Component', () => {
       t: { sugLabel1: 'Role', sugText1: 'Tell me about role' }
     });
 
-    render(
-      <LanguageProvider>
-        <ScoutAI />
-      </LanguageProvider>
-    );
+    render(<ScoutAI />);
 
     act(() => {
       screen.getByText('Role').click();

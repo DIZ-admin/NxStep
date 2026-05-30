@@ -1,8 +1,7 @@
-import { render, screen, act } from '@testing-library/react';
+import { screen, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { MediaShowcase } from './MediaShowcase';
-import { PortfolioProvider } from '../contexts/PortfolioContext';
-import { LanguageProvider } from '../contexts/LanguageContext';
+import { renderWithProviders as render } from '../utils/test-utils';
 
 Object.assign(navigator, {
   clipboard: {
@@ -20,13 +19,7 @@ describe('MediaShowcase Component', () => {
   });
 
   it('renders media correctly and switches tabs', () => {
-    render(
-      <LanguageProvider>
-        <PortfolioProvider>
-          <MediaShowcase />
-        </PortfolioProvider>
-      </LanguageProvider>
-    );
+    render(<MediaShowcase />);
 
     expect(screen.getByText('NxStep Challenger Highlight Reel - Aggressive Quad Kills')).toBeInTheDocument();
 
@@ -38,13 +31,7 @@ describe('MediaShowcase Component', () => {
   });
 
   it('handles copy link functionality', () => {
-    render(
-      <LanguageProvider>
-        <PortfolioProvider>
-          <MediaShowcase />
-        </PortfolioProvider>
-      </LanguageProvider>
-    );
+    render(<MediaShowcase />);
     
     act(() => {
       screen.getAllByTitle('Copy demo link')[0].click();

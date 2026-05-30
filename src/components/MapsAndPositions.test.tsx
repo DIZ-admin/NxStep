@@ -1,18 +1,11 @@
-import { render, screen, act } from '@testing-library/react';
+import { screen, act } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { MapsAndPositions } from './MapsAndPositions';
-import { PortfolioProvider } from '../contexts/PortfolioContext';
-import { LanguageProvider } from '../contexts/LanguageContext';
+import { renderWithProviders as render } from '../utils/test-utils';
 
 describe('MapsAndPositions Component', () => {
   it('renders maps and allows switching', () => {
-    render(
-      <LanguageProvider>
-        <PortfolioProvider>
-          <MapsAndPositions />
-        </PortfolioProvider>
-      </LanguageProvider>
-    );
+    render(<MapsAndPositions />);
 
     // Initial selected map is Ancient
     expect(screen.getByText('de_ancient')).toBeInTheDocument();
