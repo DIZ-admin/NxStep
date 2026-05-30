@@ -1,6 +1,4 @@
 import { createContext, useContext, useState, useMemo, useCallback, useEffect } from "react";
-import { getDoc, doc } from "firebase/firestore";
-import { db } from "../firebase";
 import { PortfolioData } from "../types";
 import { nxstepPortfolioData, nxstepPortfolioDataUK } from "../data";
 import { useLanguage } from "./LanguageContext";
@@ -31,6 +29,8 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const loadFromFirestore = async () => {
       try {
+        const { getDoc, doc } = await import("firebase/firestore");
+        const { db } = await import("../firebase");
         const docRef = doc(db, "faceitStats", "NxStep");
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {

@@ -68,8 +68,8 @@ service cloud.firestore {
 
     match /faceitMatches/{matchId} {
       allow read, list: if true;
-      allow create: if isValidId(matchId) && isValidFaceitMatch(incoming());
-      allow delete, update: if false;
+      allow create, update: if isValidId(matchId) && isValidFaceitMatch(incoming());
+      allow delete: if false;
     }
   }
 }
