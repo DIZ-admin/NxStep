@@ -7,14 +7,17 @@ interface LobbyContrastPanelProps {
 }
 
 export const LobbyContrastPanel = memo(function LobbyContrastPanel({ stats: s, t }: LobbyContrastPanelProps) {
-  const comparisons = useMemo(() => [
-    { label: t.ratingLabel, player: 1.27, average: 1.05, desc: t.ratingDesc, suffix: "" },
-    { label: t.adrLabel, player: 92.0, average: 78.5, desc: t.adrDesc, suffix: "" },
-    { label: t.kdRatioLabel, player: 1.19, average: 1.04, desc: t.kdRatioDesc, suffix: "" },
-    { label: t.hsRateLabel, player: 65.0, average: 50.2, desc: t.hsRateDesc, suffix: "%" },
-    { label: t.kprLabel, player: 0.86, average: 0.71, desc: t.kprDesc, suffix: "" },
-    { label: t.consistencyLabel, player: 84.0, average: 65.0, desc: t.consistencyDesc, suffix: "%" },
-  ], [t]);
+  const comparisons = useMemo(() => {
+    const r = s.currentRating ?? s.faceitRating ?? 1.27;
+    return [
+      { label: t.ratingLabel, player: r, average: 1.05, desc: t.ratingDesc, suffix: "" },
+      { label: t.adrLabel, player: s.currentAdr ?? s.adr ?? 92.0, average: 78.5, desc: t.adrDesc, suffix: "" },
+      { label: t.kdRatioLabel, player: parseFloat((r - 0.08).toFixed(2)) || 1.19, average: 1.04, desc: t.kdRatioDesc, suffix: "" },
+      { label: t.hsRateLabel, player: parseFloat(s.currentHs?.replace('%', '') ?? s.hsRange?.split('%')[0] ?? "65.0"), average: 50.2, desc: t.hsRateDesc, suffix: "%" },
+      { label: t.kprLabel, player: s.kr ?? 0.86, average: 0.71, desc: t.kprDesc, suffix: "" },
+      { label: t.consistencyLabel, player: parseFloat(s.consistencyRange?.split('%')[0] ?? "84.0"), average: 65.0, desc: t.consistencyDesc, suffix: "%" },
+    ];
+  }, [t, s]);
 
   return (
     <div id="lobby-contrast-panel" className="bg-zinc-950/40 border border-zinc-800/80 rounded-xl p-4 sm:p-6 overflow-hidden">
