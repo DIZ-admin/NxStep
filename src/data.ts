@@ -150,45 +150,17 @@ export const nxstepPortfolioData: PortfolioData = {
   experience: [
     {
       type: "team",
-      name: "ESEA Entry Div",
-      roleOrResult: "Entry / Active Rifler",
-      periodOrScore: "10-4 Record",
-      details: "Acted as key opening space maker, leading first blood entries in high-level match scenarios."
-    },
-    {
-      type: "league",
-      name: "UKIC Masters Participation",
-      roleOrResult: "Active CS2 Competitor",
-      periodOrScore: "Qualified/Participated",
-      details: "Gained structural experience playing against elite regional teams and coordinated rosters."
-    },
-    {
-      type: "league",
-      name: "UESF Championship",
-      roleOrResult: "Key Rifler",
-      periodOrScore: "VOD / Live Tournaments",
-      details: "Participated in national level competitions under structured team atmospheres."
+      name: "[Your Team Name]",
+      roleOrResult: "Your Role (e.g., Entry / Active Rifler)",
+      periodOrScore: "Your Record or Period",
+      details: "Provide details about your actual team or league experience here, and I will update it. E.g., 'Acted as key opening space maker...'"
     },
     {
       type: "trial",
-      name: "B8 Prospects Trial",
-      roleOrResult: "Trial Rifler",
-      periodOrScore: "Successful Group Stage Scrims",
-      details: "Benchmarked against high-tier Eastern European prospects in tactical environments."
-    },
-    {
-      type: "trial",
-      name: "IC Prospects Trial",
-      roleOrResult: "Candidate Entry",
-      periodOrScore: "Tactical Evaluation",
-      details: "Acquired elite coach evaluation feedback regarding positioning, rotations, and utility execution."
-    },
-    {
-      type: "team",
-      name: "Mixed Team Scrims & Stand-in",
-      roleOrResult: "Flexible Adaptable Rifler",
-      periodOrScore: "Ongoing Practice Team VODs",
-      details: "Consistently stood in for competitive teams, adapting instantly to custom strategies and playbooks."
+      name: "[Your Scrim / Trial History]",
+      roleOrResult: "Your Role",
+      periodOrScore: "Result",
+      details: "List any relevant academy tests, mix scrims, or trials you have played recently."
     }
   ],
   links: {
@@ -216,7 +188,7 @@ export const nxstepPortfolioData: PortfolioData = {
 
 export const nxstepPortfolioDataUK: PortfolioData = {
   name: "NxStep",
-  tagline: "CS2 Рифлер | FACEIT Челленджер",
+  tagline: "CS2 Райфлер | FACEIT Челленджер",
   age: 18,
   location: "Європа (ЄС)",
   languages: ["Англійська (C2)", "Українська (Рідна)"],
@@ -260,7 +232,7 @@ export const nxstepPortfolioDataUK: PortfolioData = {
     "Чітка, структурована та холоднокровна комунікація під тиском",
     "Стійкість до тильту, вміння тримати фокус команди у складних ситуаціях",
     "Швидка адаптивність: миттєвий перехід на оптимальний ПК сетап 360 Гц",
-    "Позитивна, constructive участь у діалогах, налаштованість на роботу в команді",
+    "Позитивна, конструктивна участь у діалогах, налаштованість на роботу в команді",
     "Висока дисципліна тренувань: процвітає в умовах інтенсивних командних праків"
   ],
   focus: [
@@ -316,7 +288,7 @@ export const nxstepPortfolioDataUK: PortfolioData = {
         {
           name: "Контроль Вулиці / Yard",
           role: "Спеціаліст з простору",
-          description: "Агресивно тримає вулицю, присікає переходи в сикрет і заходить на таймінговые фланги в середині раунду.",
+          description: "Агресивно тримає вулицю, присікає переходи в сикрет і заходить на таймінгові фланги в середині раунду.",
           difficulty: "High"
         }
       ],
@@ -364,45 +336,17 @@ export const nxstepPortfolioDataUK: PortfolioData = {
   experience: [
     {
       type: "team",
-      name: "ESEA Entry Div",
-      roleOrResult: "Опенер / Активний Рифлер",
-      periodOrScore: "Рекорд 10-4",
-      details: "Виступав у ролі ключового гравця зі створення спейсу, роблячи перші вбивства у складних ігрових сценаріях."
-    },
-    {
-      type: "league",
-      name: "Участь в UKIC Masters",
-      roleOrResult: "Активний учасник по CS2",
-      periodOrScore: "Кваліфікація/Участь",
-      details: "Отримав структурний досвід гри проти сильних регіональних команд та злагоджених змагальних складів."
-    },
-    {
-      type: "league",
-      name: "Чемпіонат UESF",
-      roleOrResult: "Ключевой Рифлер",
-      periodOrScore: "Записи / Лайв Турніри",
-      details: "Брав участь у національних змаганнях у структурованій командній атмосфері."
+      name: "[Назва вашої команди / Досвід]",
+      roleOrResult: "Ваша роль (напр. Опенер)",
+      periodOrScore: "Період або рекорд",
+      details: "Будь ласка, розкажіть про ваш реальний змагальний досвід, і я оновлю це поле."
     },
     {
       type: "trial",
-      name: "Тестування у B8 Prospects",
-      roleOrResult: "Тестовий Рифлер",
-      periodOrScore: "Успішні праки першої стадії",
-      details: "Порівнював свої навички з сильними талантами Східної Європи в тактичних scrim-матчах."
-    },
-    {
-      type: "trial",
-      name: "Тестування у IC Prospects",
-      roleOrResult: "Кандидат на Опенера",
-      periodOrScore: "Тактичний аналіз",
-      details: "Отримав цінний зворотний зв'язок від елітних тренерів щодо позиціонування, ротацій та розкидок."
-    },
-    {
-      type: "team",
-      name: "Мікс Праки та Стенд-ін",
-      roleOrResult: "Гнучкий Рифлер, що адаптується",
-      periodOrScore: "Праки та записи поточних ігор",
-      details: "Регулярно заміняв гравців у змагальних складах, миттєво адаптуючись під чужі тактики та плейбуки."
+      name: "[Тестування / Праки]",
+      roleOrResult: "Позиція",
+      periodOrScore: "Результати тестування",
+      details: "Вкажіть команди або академії, де ви проходили тести чи грали праки."
     }
   ],
   links: {
@@ -423,7 +367,7 @@ export const nxstepPortfolioDataUK: PortfolioData = {
     ],
     vods: [
       { title: "VOD матчу ESEA - Повне домінування на Ancient (Статистика 28-14)", url: "https://youtube.com/watch?v=placeholder-vod1" },
-      { title: "UKIC Masters праки - Запис grease з голосами тіммейтів", url: "https://youtube.com/watch?v=placeholder-vod2" }
+      { title: "UKIC Masters праки - Запис гри з комунікацією команди", url: "https://youtube.com/watch?v=placeholder-vod2" }
     ]
   }
 };
