@@ -11,9 +11,9 @@ export function ExperienceTimeline({ data, lang = "en" }: { data: PortfolioData;
   const filtered = filter === "all" ? experiences : experiences.filter(e => e.type === filter);
 
   return (
-    <div id="experience-container" className="w-full flex flex-col gap-6 text-left">
+    <section id="experience-container" aria-labelledby="experience-heading" className="w-full flex flex-col gap-6 text-left">
       {/* Title */}
-      <div id="experience-header" className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <header id="experience-header" className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 id="experience-heading" className="text-xl sm:text-2xl font-bold font-sans text-white flex items-center gap-2">
             <Trophy className="w-5 h-5 text-orange-500" />
@@ -25,7 +25,7 @@ export function ExperienceTimeline({ data, lang = "en" }: { data: PortfolioData;
         </div>
 
         {/* Filter Badges */}
-        <div id="experience-filters" className="flex flex-wrap items-center gap-1.5 p-1 bg-zinc-900 border border-zinc-800 rounded-lg">
+        <nav aria-label="Experience type filters" id="experience-filters" className="flex flex-wrap items-center gap-1.5 p-1 bg-zinc-900 border border-zinc-800 rounded-lg">
           {(["all", "team", "trial", "league"] as const).map((type) => (
             <button
               key={type}
@@ -46,14 +46,15 @@ export function ExperienceTimeline({ data, lang = "en" }: { data: PortfolioData;
                     : t.leagues}
             </button>
           ))}
-        </div>
-      </div>
+        </nav>
+      </header>
 
       {/* Grid List */}
-      <div id="experience-grid-display" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div role="list" id="experience-grid-display" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filtered.map((item, index) => {
           return (
-            <div
+            <article
+              role="listitem"
               key={item.name + index}
               id={`experience-item-${index}`}
               className="bg-zinc-950/45 border border-zinc-800/80 hover:border-zinc-700/85 rounded-xl p-5 relative overflow-hidden flex flex-col justify-between transition-all group"
@@ -112,13 +113,13 @@ export function ExperienceTimeline({ data, lang = "en" }: { data: PortfolioData;
                   backgroundColor: item.type === "trial" ? "#c084fc" : item.type === "league" ? "#fb923c" : "#22d3ee",
                 }}
               />
-            </div>
+            </article>
           );
         })}
       </div>
 
       {/* Recruitment Status Notice Card */}
-      <div id="recruitment-status-notice" className="p-5 rounded-xl border border-dashed border-orange-500/30 bg-orange-500/5 mt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <aside aria-label="Recruitment Notice" id="recruitment-status-notice" className="p-5 rounded-xl border border-dashed border-orange-500/30 bg-orange-500/5 mt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="space-y-1">
           <p className="text-sm font-extrabold text-white flex items-center gap-1.5 font-sans">
             <Award className="w-4.5 h-4.5 text-orange-400" />
@@ -132,11 +133,12 @@ export function ExperienceTimeline({ data, lang = "en" }: { data: PortfolioData;
         <a
           id="btn-recruit-notice-link"
           href="mailto:kostasnook@gmail.com"
+          aria-label="Send Recruitment Inquiry"
           className="px-5 py-2 hover:bg-orange-500 hover:text-black border border-orange-400/50 hover:border-orange-500 text-orange-400 text-xs font-black font-mono tracking-wider rounded-lg uppercase transition-all whitespace-nowrap"
         >
           {t.sendRequest}
         </a>
-      </div>
-    </div>
+      </aside>
+    </section>
   );
 }

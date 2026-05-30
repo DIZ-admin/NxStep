@@ -149,7 +149,7 @@ export function ScoutAI({ lang = "en" }: { lang?: Language }) {
   };
 
   return (
-    <div id="scout-ai-container" className="w-full bg-zinc-950/60 border border-zinc-800 rounded-2xl overflow-hidden flex flex-col md:grid md:grid-cols-12 md:h-[580px] shadow-2xl text-left">
+    <section id="scout-ai-container" aria-label="Scout AI Chat" className="w-full bg-zinc-950/60 border border-zinc-800 rounded-2xl overflow-hidden flex flex-col md:grid md:grid-cols-12 md:h-[580px] shadow-2xl text-left">
       {/* Informative Side-Bar (About the AI Scout) */}
       <div id="scout-ai-left-sidebar" className="md:col-span-4 bg-zinc-950 border-r border-zinc-900 p-5 flex flex-col justify-between gap-6 md:h-full overflow-y-auto">
         <div className="space-y-4">
@@ -285,6 +285,7 @@ export function ScoutAI({ lang = "en" }: { lang?: Language }) {
           <input
             id="scout-text-input"
             type="text"
+            aria-label="Chat input"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
@@ -295,12 +296,13 @@ export function ScoutAI({ lang = "en" }: { lang?: Language }) {
             id="action-send-message"
             onClick={() => handleSendMessage()}
             disabled={!inputMessage.trim() || isSending}
+            aria-label="Send message"
             className="p-3 bg-orange-500 hover:bg-orange-400 disabled:bg-zinc-800 disabled:text-zinc-600 text-black font-bold rounded-xl transition-all shadow-md shadow-orange-500/5 cursor-pointer flex-shrink-0"
           >
             <Send className="w-4.5 h-4.5" />
           </button>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

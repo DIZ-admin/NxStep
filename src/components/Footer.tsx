@@ -5,7 +5,7 @@ import { translations, Language } from "../translations";
 export function Footer({ data, lang }: { data: PortfolioData; lang: Language }) {
   const t = translations[lang];
   return (
-    <div id="landing-footer" className="pt-12 pb-6 border-t border-zinc-900/80 flex flex-col md:flex-row justify-between items-center gap-6">
+    <footer id="landing-footer" className="pt-12 pb-6 border-t border-zinc-900/80 flex flex-col md:flex-row justify-between items-center gap-6">
       <div className="text-center md:text-left space-y-1">
         <p className="text-xs font-mono font-bold text-zinc-400 uppercase tracking-widest">{t.footerCopy}</p>
         <p className="text-[11px] text-zinc-650 font-mono">{t.footerSub}</p>
@@ -21,6 +21,6 @@ export function Footer({ data, lang }: { data: PortfolioData; lang: Language }) 
         <span className="text-zinc-800">•</span>
         <span className="text-zinc-500 uppercase">Discord: NxStep</span>
       </div>
-    </div>
+    </footer>
   );
 }

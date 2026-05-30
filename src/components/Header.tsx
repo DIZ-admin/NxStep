@@ -7,11 +7,11 @@ export function Header({ data, lang = "en" }: { data: PortfolioData; lang?: Lang
   const t = translations[lang];
 
   return (
-    <div id="header-container" className="relative w-full rounded-[32px] overflow-hidden border border-white/5 bg-zinc-900/40 backdrop-blur-md shadow-[inset_0_1px_0px_rgba(255,255,255,0.05)]">
+    <header id="header-container" className="relative w-full rounded-[32px] overflow-hidden border border-white/5 bg-zinc-900/40 backdrop-blur-md shadow-[inset_0_1px_0px_rgba(255,255,255,0.05)]">
       {/* Background Banner */}
       <div id="header-banner" className="h-44 sm:h-56 md:h-64 relative w-full overflow-hidden">
         <img
-          src={data.coverImageUrl || "/src/assets/images/nxstep_esports_banner_1780012674655.png"}
+          src={data.coverImageUrl || "/nxstep_esports_banner_1780012674655.png"}
           alt="CS2 Esports Banner"
           className="w-full h-full object-cover object-center"
           referrerPolicy="no-referrer"
@@ -25,14 +25,14 @@ export function Header({ data, lang = "en" }: { data: PortfolioData; lang?: Lang
         <div id="avatar-wrapper" className="relative group mx-auto md:mx-0">
           <div className="absolute inset-x-0 bottom-0 top-0 bg-orange-500/10 rounded-3xl blur-md scale-105" />
           <img
-            src={data.avatarUrl || "/src/assets/images/nxstep_esports_avatar_1780012695878.png"}
+            src={data.avatarUrl || "/nxstep_esports_avatar_1780012695878.png"}
             alt="NxStep Agent Avatar"
             className="relative w-32 h-32 sm:w-36 sm:h-36 object-cover rounded-3xl border-2 border-orange-500/60 bg-zinc-900 shadow-xl"
             referrerPolicy="no-referrer"
           />
           <span className="absolute bottom-2 right-2 bg-emerald-500 text-black text-xs font-bold leading-none px-2 py-1 rounded-full border border-zinc-900 flex items-center gap-1 shadow-md">
             <span className="w-2 h-2 rounded-full bg-black animate-pulse" />
-            LFG
+            LFT
           </span>
         </div>
 
@@ -123,6 +123,6 @@ export function Header({ data, lang = "en" }: { data: PortfolioData; lang?: Lang
           </span>
         </div>
       </div>
-    </div>
+    </header>
   );
 }

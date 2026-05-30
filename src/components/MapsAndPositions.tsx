@@ -10,9 +10,9 @@ export function MapsAndPositions({ data, lang = "en" }: { data: PortfolioData; l
   const t = translations[lang];
 
   return (
-    <div id="maps-positions-container" className="w-full flex flex-col gap-6 text-left">
+    <section id="maps-positions-container" aria-labelledby="maps-title" className="w-full flex flex-col gap-6 text-left">
       {/* Heading */}
-      <div className="flex items-start justify-between relative">
+      <header className="flex items-start justify-between relative">
         <div>
           <h2 id="maps-title" className="text-xl sm:text-2xl font-bold font-sans text-white flex items-center gap-2">
             <Map className="w-5 h-5 text-orange-500" />
@@ -25,12 +25,12 @@ export function MapsAndPositions({ data, lang = "en" }: { data: PortfolioData; l
         <div className="lg:hidden flex items-center gap-1.5 text-[10px] text-zinc-500 font-mono tracking-widest uppercase mt-2">
           <MoveHorizontal className="w-3 h-3" /> Swipe
         </div>
-      </div>
+      </header>
 
       {/* Grid: Map Button Picker & Active Map Detail */}
       <div id="maps-main-grid" className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Map Grid Selectors (Left side) */}
-        <div id="map-selectors-col" className="lg:col-span-4 flex flex-row lg:flex-col overflow-x-auto lg:overflow-visible gap-3 pb-3 lg:pb-0 -mx-4 px-4 lg:mx-0 lg:px-0 no-scrollbar w-full snap-x snap-mandatory scroll-pl-4">
+        <nav aria-label="Map selections" id="map-selectors-col" className="lg:col-span-4 flex flex-row lg:flex-col overflow-x-auto lg:overflow-visible gap-3 pb-3 lg:pb-0 -mx-4 px-4 lg:mx-0 lg:px-0 no-scrollbar w-full snap-x snap-mandatory scroll-pl-4">
           {mapDataList.map((mapItem, idx) => (
             <button
               key={mapItem.name}
@@ -84,10 +84,10 @@ export function MapsAndPositions({ data, lang = "en" }: { data: PortfolioData; l
               />
             </button>
           ))}
-        </div>
+        </nav>
 
         {/* Detailed Map Visualizer & Tactical Description (Right side) */}
-        <div id="map-detail-panel" className="lg:col-span-8 flex flex-col h-full bg-zinc-900/40 backdrop-blur-md border border-white/5 shadow-[inset_0_1px_0px_rgba(255,255,255,0.05)] rounded-[32px] overflow-hidden">
+        <article id="map-detail-panel" className="lg:col-span-8 flex flex-col h-full bg-zinc-900/40 backdrop-blur-md border border-white/5 shadow-[inset_0_1px_0px_rgba(255,255,255,0.05)] rounded-[32px] overflow-hidden">
           {/* Header representation of Map banner */}
           <div id="map-detail-banner" className="h-44 sm:h-56 relative overflow-hidden shrink-0">
             <img
@@ -196,8 +196,8 @@ export function MapsAndPositions({ data, lang = "en" }: { data: PortfolioData; l
               </div>
             </div>
           </div>
-        </div>
+        </article>
       </div>
-    </div>
+    </section>
   );
 }

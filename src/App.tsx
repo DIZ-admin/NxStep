@@ -26,6 +26,10 @@ export default function App() {
 
   const t = translations[lang];
 
+  useEffect(() => {
+    document.documentElement.lang = lang === "uk" ? "uk" : "en";
+  }, [lang]);
+
   // Load initial from localStorage if preset, otherwise default to nxstepPortfolioData
   const [data, setData] = useState(() => {
     const saved = localStorage.getItem("nxstep_portfolio_data");
@@ -68,7 +72,7 @@ export default function App() {
     <div id="portfolio-app-root" className="min-h-screen bg-zinc-950 text-zinc-100 font-sans selection:bg-orange-500 selection:text-black pb-16">
       <TopBar lang={lang} setLang={setLang} />
 
-      <div id="main-content-layout" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-6">
+      <main id="main-content-layout" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-6">
         
         {/* Module 1: Header */}
         <Header data={activePortfolioData} lang={lang} />
@@ -93,7 +97,7 @@ export default function App() {
 
         {/* Footer info strip */}
         <Footer data={activePortfolioData} lang={lang} />
-      </div>
+      </main>
     </div>
   );
 }

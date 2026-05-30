@@ -1,22 +1,15 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import { PortfolioData } from "../types";
-import { nxstepPortfolioData } from "../data";
 import { translations, Language } from "../translations";
-import { Award, Zap, Crosshair, Sparkles, TrendingUp, RefreshCw, BarChart2, ShieldAlert, Cpu, Check, Activity, Sliders, Globe } from "lucide-react";
+import { Award, Zap, Crosshair, Sparkles, TrendingUp, BarChart2, ShieldAlert } from "lucide-react";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 
 export function StatsDashboard({ data, onUpdateData, lang = "en" }: { data: PortfolioData; onUpdateData: (newData: PortfolioData) => void; lang?: Language }) {
   const s = data.stats;
   const t = translations[lang];
 
-  // Sync / simulation states
-  const [syncUrl, setSyncUrl] = useState("https://www.faceit.com/en/players/NxStep");
-  const [syncStatus, setSyncStatus] = useState<"idle" | "connecting" | "fetching" | "success" | "error">("idle");
-  const [syncLog, setSyncLog] = useState<string[]>([]);
-  const [activePreset, setActivePreset] = useState<"current" | "pro" | "initial" | "custom">("current");
-
   // State to simulate a recent match history lobby ELO selector
-  const [selectedSubTheme, setSelectedSubTheme] = useState<"lobby" | "historical" | "sync">("historical");
+  const [selectedSubTheme, setSelectedSubTheme] = useState<"lobby" | "historical">("historical");
 
   // Comparison metrics for standard High ELO players (Avg Master Level 10 vs NxStep)
   const comparisons = [
@@ -76,127 +69,8 @@ export function StatsDashboard({ data, onUpdateData, lang = "en" }: { data: Port
     activeSetup: ""
   };
 
-  const runSync = useCallback(async () => {
-    setSyncStatus("connecting");
-    const urlObj = syncUrl.trim();
-    let extractedUsername = "NxStep";
-    if (urlObj.includes("/players/")) {
-      const parts = urlObj.split("/players/");
-      if (parts[1]) {
-        extractedUsername = parts[1].split("/")[0].split("?")[0];
-      }
-    } else if (urlObj.includes("faceit.com/")) {
-      const parts = urlObj.split("/");
-      const lastPart = parts[parts.length - 1];
-      if (lastPart) {
-        extractedUsername = lastPart.split("?")[0];
-      }
-    } else {
-      extractedUsername = urlObj;
-    }
-    if (!extractedUsername) extractedUsername = "NxStep";
-
-    setSyncLog([
-      t.syncInitHandshake,
-      `${t.syncTarget} ${extractedUsername}`,
-      t.syncConnecting
-    ]);
-
-    try {
-      const res = await fetch(`/api/faceit/sync?username=${encodeURIComponent(extractedUsername)}`);
-      if (!res.ok) {
-        const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.error || `HTTP ${res.status}`);
-      }
-
-      const result = await res.json();
-      if (result.success) {
-        let newMaps = [...data.maps];
-        if (result.segments && Array.isArray(result.segments)) {
-          newMaps = newMaps.map(m => {
-            const normalizedName = `de_${m.name.toLowerCase()}`;
-            const seg = result.segments.find((s: any) => 
-               s.label === normalizedName || 
-               s.label === m.name.toLowerCase() || 
-               s.name === normalizedName ||
-               (s._id && s._id.segmentId && s._id.segmentId.includes(m.name.toLowerCase()))
-            );
-            if (seg && seg.stats) {
-              const wr = parseInt(seg.stats["Win Rate %"] || seg.stats.winRate || "0", 10);
-              const matches = parseInt(seg.stats["Matches"] || seg.stats.matches || "0", 10);
-              return { ...m, winrate: wr, matches };
-            }
-            return m;
-          });
-        }
-
-        const updated = {
-          ...data,
-          avatarUrl: result.avatarUrl || data.avatarUrl,
-          coverImageUrl: result.coverImageUrl || data.coverImageUrl,
-          stats: {
-            ...data.stats,
-            ...result.stats
-          },
-          maps: newMaps
-        };
-
-        onUpdateData(updated);
-        setSyncStatus("success");
-        setSyncLog(prev => [
-          ...prev,
-          `${t.syncSuccess} ${result.method === "OFFICIAL_API" ? t.syncOfficialApi : t.syncPublicApi}`,
-          `${t.syncRetrieved} ${result.elo} (Level ${result.level})`,
-          `${t.syncMatches} ${result.stats.matchesPlayed} | ${t.syncScaleKd} ${result.stats.faceitRating}`,
-          t.syncSyncComplete
-        ]);
-      } else {
-        throw new Error("Invalid response format");
-      }
-    } catch (err: any) {
-      console.warn("Fetch stats error, falling back:", err);
-      setSyncStatus("fetching");
-      setSyncLog(prev => [
-        ...prev,
-        `${t.syncNetworkBypass} ${err.message}`,
-        t.syncActivating,
-        t.syncResolving
-      ]);
-
-      setTimeout(() => {
-        const randElo = 3754 + Math.floor(Math.random() * 45) - 15;
-        const randMatches = 1642 + Math.floor(Math.random() * 6) + 1;
-        const updated = {
-          ...data,
-          stats: {
-            ...data.stats,
-            peakElo: randElo,
-            matchesPlayed: randMatches,
-            recentForm: "+504 ELO"
-          }
-        };
-        onUpdateData(updated);
-        setSyncStatus("success");
-        setSyncLog(prev => [
-          ...prev,
-          `${t.syncFetchComplete} ${extractedUsername}`,
-          `${t.syncUpdatedBase} ${randElo} ELO | ${t.syncMatches} ${randMatches}`,
-          t.syncTip
-        ]);
-      }, 1800);
-    }
-  }, [syncUrl, lang, data, onUpdateData]);
-
-  useEffect(() => {
-    // Auto sync on mount
-    if (syncStatus === "idle") {
-      runSync();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
-    <div id="stats-dashboard-container" className="w-full flex flex-col gap-6 text-left">
+    <section id="stats-dashboard-container" aria-labelledby="stats-dashboard-heading" className="w-full flex flex-col gap-6 text-left">
       {/* Visual Title */}
       <div id="stats-main-header" className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -208,7 +82,7 @@ export function StatsDashboard({ data, onUpdateData, lang = "en" }: { data: Port
         </div>
 
         {/* Mode Toggle Button */}
-        <div id="metric-toggle-group" className="flex flex-wrap items-center gap-1.5 p-1 bg-zinc-900 border border-zinc-800 rounded-lg">
+        <nav id="metric-toggle-group" aria-label="Metric Views" className="flex flex-wrap items-center gap-1.5 p-1 bg-zinc-900 border border-zinc-800 rounded-lg">
           <button
             id="toggle-btn-historical"
             onClick={() => setSelectedSubTheme("historical")}
@@ -231,19 +105,7 @@ export function StatsDashboard({ data, onUpdateData, lang = "en" }: { data: Port
           >
             {t.btnContrast}
           </button>
-          <button
-            id="toggle-btn-sync"
-            onClick={() => setSelectedSubTheme("sync")}
-            className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all whitespace-nowrap min-h-[32px] flex items-center gap-1 text-orange-400 ${
-              selectedSubTheme === "sync"
-                ? "bg-orange-500 text-black shadow-md !text-black font-extrabold"
-                : "hover:text-amber-300"
-            }`}
-          >
-            <RefreshCw className={`w-3 h-3 ${syncStatus === "connecting" || syncStatus === "fetching" ? "animate-spin text-black" : "text-orange-500"}`} />
-            {t.btnSync}
-          </button>
-        </div>
+        </nav>
       </div>
 
       {/* Grid of 4 Elite Metric Cards */}
@@ -313,7 +175,6 @@ export function StatsDashboard({ data, onUpdateData, lang = "en" }: { data: Port
         </div>
       </div>
 
-      {/* Conditionally Rendered Sub-Dashboard Sections based on Mode Tab */}
       {/* Conditionally Rendered Sub-Dashboard Sections based on Mode Tab */}
       {selectedSubTheme === "historical" ? (
         /* Historical Ascent Slider Story Board with Recharts ELO curve */
@@ -425,7 +286,7 @@ export function StatsDashboard({ data, onUpdateData, lang = "en" }: { data: Port
           </div>
 
           {/* Navigational timeline step badges below chart */}
-          <div id="timeline-interactive-track" className="relative mt-2 mb-4 py-2 border-t border-zinc-900/40">
+          <nav id="timeline-interactive-track" aria-label="Timeline navigation" className="relative mt-2 mb-4 py-2 border-t border-zinc-900/40">
             <div className="relative flex justify-between">
               {eloTimeline.map((item, idx) => (
                 <button
@@ -452,7 +313,7 @@ export function StatsDashboard({ data, onUpdateData, lang = "en" }: { data: Port
                 </button>
               ))}
             </div>
-          </div>
+          </nav>
 
           {/* Timeline Node Detail Block */}
           <div
@@ -558,266 +419,8 @@ export function StatsDashboard({ data, onUpdateData, lang = "en" }: { data: Port
             })}
           </div>
         </div>
-      ) : (
-        /* FACEIT Live Sync Control Center */
-        <div id="faceit-sync-panel" className="bg-zinc-950/40 border border-zinc-800/80 rounded-xl p-4 sm:p-6 space-y-6">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-900 pb-4">
-            <div>
-              <h4 className="text-base font-bold text-white flex items-center gap-2">
-                <Sliders className="w-4.5 h-4.5 text-orange-500" />
-                {t.syncHeader}
-              </h4>
-              <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
-                {t.syncNotice}
-              </p>
-            </div>
-            <button
-              onClick={() => {
-                onUpdateData(nxstepPortfolioData);
-                setActivePreset("current");
-                setSyncStatus("idle");
-                setSyncLog([]);
-              }}
-              className="px-3 py-1.5 self-start md:self-auto text-[10px] font-bold font-mono uppercase bg-zinc-900 hover:bg-zinc-855 border border-zinc-800 text-zinc-400 hover:text-white rounded transition-colors"
-            >
-              {t.restoreDefault}
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {/* Left side: Simulated Live Syncer API Handshake */}
-            <div className="lg:col-span-5 space-y-4 bg-zinc-950 p-4 rounded-xl border border-zinc-900 flex flex-col justify-between">
-              <div className="space-y-3.5">
-                <span className="text-[10px] font-mono font-black tracking-widest text-zinc-500 block uppercase">
-                  {t.syncASection}
-                </span>
-                
-                <div>
-                  <label className="text-[11px] font-mono text-zinc-400 block mb-1">
-                    {t.playerLinkLabel}
-                  </label>
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      className="flex-1 bg-zinc-900 border border-zinc-800 rounded px-2.5 py-1.5 text-xs text-zinc-300 font-mono focus:outline-none focus:border-orange-500/50"
-                      value={syncUrl}
-                      onChange={(e) => setSyncUrl(e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => runSync()}
-                  disabled={syncStatus === "connecting" || syncStatus === "fetching"}
-                  className="w-full py-2 bg-orange-500 hover:bg-orange-400 active:bg-orange-600 disabled:bg-zinc-800 text-black font-extrabold text-xs rounded uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 min-h-[40px]"
-                >
-                  <RefreshCw className={`w-3.5 h-3.5 ${syncStatus === "connecting" || syncStatus === "fetching" ? "animate-spin" : ""}`} />
-                  {t.syncActionBtn}
-                </button>
-              </div>
-
-              {/* Terminal Log Output */}
-              <div className="mt-4 bg-black border border-zinc-900 rounded p-3 font-mono text-[10px] text-zinc-400 h-[120px] overflow-y-auto space-y-1 scrollbar-thin text-left">
-                {syncLog.length === 0 ? (
-                  <p className="text-zinc-650 italic">
-                    {t.syncConsoleIdle}
-                  </p>
-                ) : (
-                  syncLog.map((log, i) => (
-                    <p key={i} className={log.startsWith("SUCCESS") || log.startsWith("FETCH COMPLETE") || log.startsWith("СИНХРОНІЗАЦІ") ? "text-emerald-400 font-bold" : log.startsWith("TARGET") || log.startsWith("PEAK ELO") || log.startsWith("ОТРИМАНО ПІК") || log.startsWith("АДРЕСАТ") ? "text-orange-400" : ""}>
-                      &gt; {log}
-                    </p>
-                  ))
-                )}
-              </div>
-            </div>
-
-            {/* Right side: Hard Tuning Sliders (Instant Reactive Mode) */}
-            <div className="lg:col-span-7 space-y-5 bg-zinc-950/45 p-4 sm:p-5 rounded-xl border border-zinc-900 text-left">
-              <span className="text-[10px] font-mono font-black tracking-widest text-zinc-500 block uppercase">
-                {t.syncBSection}
-              </span>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* ELO Slider */}
-                <div className="space-y-1">
-                  <div className="flex justify-between items-baseline">
-                    <label className="text-[11px] font-mono text-zinc-400 uppercase">FACEIT ELO</label>
-                    <span className="text-xs font-mono font-bold text-orange-400">{s.peakElo} ELO</span>
-                  </div>
-                  <input
-                    type="range"
-                    min="2000"
-                    max="5000"
-                    step="5"
-                    className="w-full accent-orange-500 h-1.5 bg-zinc-900 rounded-lg appearance-none cursor-pointer"
-                    value={s.peakElo}
-                    onChange={(e) => {
-                      onUpdateData({
-                        ...data,
-                        stats: { ...s, peakElo: parseInt(e.target.value) }
-                      });
-                      setActivePreset("custom");
-                    }}
-                  />
-                </div>
-
-                {/* KD Rating Slider */}
-                <div className="space-y-1">
-                   <div className="flex justify-between items-baseline">
-                    <label className="text-[11px] font-mono text-zinc-400 uppercase">FACEIT Rating</label>
-                    <span className="text-xs font-mono font-bold text-orange-400">{s.faceitRating}</span>
-                  </div>
-                  <input
-                    type="range"
-                    min="0.80"
-                    max="2.00"
-                    step="0.01"
-                    className="w-full accent-orange-500 h-1.5 bg-zinc-900 rounded-lg appearance-none cursor-pointer"
-                    value={s.faceitRating}
-                    onChange={(e) => {
-                      onUpdateData({
-                        ...data,
-                        stats: { ...s, faceitRating: parseFloat(e.target.value) }
-                      });
-                      setActivePreset("custom");
-                    }}
-                  />
-                </div>
-
-                {/* ADR Slider */}
-                <div className="space-y-1">
-                  <div className="flex justify-between items-baseline">
-                    <label className="text-[11px] font-mono text-zinc-400 uppercase">
-                      {t.syncAvgDamage}
-                    </label>
-                    <span className="text-xs font-mono font-bold text-orange-400">{s.adr} ADR</span>
-                  </div>
-                  <input
-                    type="range"
-                    min="65"
-                    max="120"
-                    step="1"
-                    className="w-full accent-orange-500 h-1.5 bg-zinc-900 rounded-lg appearance-none cursor-pointer"
-                    value={s.adr}
-                    onChange={(e) => {
-                      onUpdateData({
-                        ...data,
-                        stats: { ...s, adr: parseInt(e.target.value) }
-                      });
-                      setActivePreset("custom");
-                    }}
-                  />
-                </div>
-
-                {/* Matches Played Slider */}
-                <div className="space-y-1">
-                  <div className="flex justify-between items-baseline">
-                    <label className="text-[11px] font-mono text-zinc-400 uppercase">
-                      {t.syncMatchesPlayed}
-                    </label>
-                    <span className="text-xs font-mono font-bold text-orange-400">{s.matchesPlayed} MS</span>
-                  </div>
-                  <input
-                    type="range"
-                    min="500"
-                    max="4000"
-                    step="10"
-                    className="w-full accent-orange-500 h-1.5 bg-zinc-900 rounded-lg appearance-none cursor-pointer"
-                    value={s.matchesPlayed}
-                    onChange={(e) => {
-                      onUpdateData({
-                        ...data,
-                        stats: { ...s, matchesPlayed: parseInt(e.target.value) }
-                      });
-                      setActivePreset("custom");
-                    }}
-                  />
-                </div>
-              </div>
-
-              {/* Fast Preset Selectors */}
-              <div className="pt-3 border-t border-zinc-900">
-                <p className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-1.5">
-                  {t.syncPresetsHead}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    onClick={() => {
-                      onUpdateData({
-                        ...data,
-                        stats: {
-                          ...s,
-                          peakElo: 3754,
-                          faceitRating: 1.27,
-                          adr: 92,
-                          matchesPlayed: 1642,
-                          recentForm: "+469 ELO"
-                        }
-                      });
-                      setActivePreset("current");
-                    }}
-                    className={`px-3 py-1.5 rounded text-xs font-mono font-bold uppercase transition-colors select-none ${
-                      activePreset === "current"
-                        ? "bg-orange-500 text-black border border-orange-500"
-                        : "bg-zinc-900 border border-zinc-800 text-zinc-300 hover:bg-zinc-850"
-                    }`}
-                  >
-                    {t.syncPresetPeak}
-                  </button>
-                  <button
-                    onClick={() => {
-                      onUpdateData({
-                        ...data,
-                        stats: {
-                          ...s,
-                          peakElo: 4320,
-                          faceitRating: 1.45,
-                          adr: 104,
-                          matchesPlayed: 2150,
-                          recentForm: "+822 ELO"
-                        }
-                      });
-                      setActivePreset("pro");
-                    }}
-                    className={`px-3 py-1.5 rounded text-xs font-mono font-bold uppercase transition-colors select-none ${
-                      activePreset === "pro"
-                        ? "bg-orange-500 text-black border border-orange-500"
-                        : "bg-zinc-900 border border-zinc-800 text-zinc-300 hover:bg-zinc-850"
-                    }`}
-                  >
-                    {t.syncPresetPro}
-                  </button>
-                  <button
-                    onClick={() => {
-                      onUpdateData({
-                        ...data,
-                        stats: {
-                          ...s,
-                          peakElo: 2900,
-                          faceitRating: 1.08,
-                          adr: 78,
-                          matchesPlayed: 1250,
-                          recentForm: "+120 ELO"
-                        }
-                      });
-                      setActivePreset("initial");
-                    }}
-                    className={`px-3 py-1.5 rounded text-xs font-mono font-bold uppercase transition-colors select-none ${
-                      activePreset === "initial"
-                        ? "bg-orange-500 text-black border border-orange-500"
-                        : "bg-zinc-900 border border-zinc-800 text-zinc-300 hover:bg-zinc-850"
-                    }`}
-                  >
-                    {t.syncPresetLaptop}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+      ) : null}
+    </section>
   );
 }
 

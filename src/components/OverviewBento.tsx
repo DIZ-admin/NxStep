@@ -7,39 +7,34 @@ export function OverviewBento({ data, lang }: { data: PortfolioData; lang: Langu
   const t = translations[lang];
 
   return (
-    <div id="bento-overview-container" className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+    <section aria-label="Portfolio Overview" id="bento-overview-container" className="grid grid-cols-1 lg:grid-cols-12 gap-5">
       {/* Quick Profile Bio Card (Left) */}
-      <div id="bento-intro" className="lg:col-span-7 bg-zinc-900/40 backdrop-blur-md border border-white/5 rounded-3xl p-6 md:p-8 flex flex-col justify-between gap-6 relative overflow-hidden shadow-[inset_0_1px_0px_rgba(255,255,255,0.05)] text-left">
-        <div className="space-y-4 relative z-10 text-left">
-          <h2 className="text-[10px] font-medium tracking-widest text-zinc-400 uppercase flex items-center gap-2">
+      <article id="bento-intro" className="lg:col-span-7 bg-zinc-900/40 backdrop-blur-md border border-white/5 rounded-3xl p-6 md:p-8 flex flex-col justify-between gap-6 relative overflow-hidden shadow-[inset_0_1px_0px_rgba(255,255,255,0.05)] text-left">
+        <div className="space-y-4 relative z-10 text-left h-full flex flex-col">
+          <h2 className="text-[10px] font-medium tracking-widest text-zinc-400 uppercase flex items-center gap-2 mb-2">
             <Terminal className="w-3.5 h-3.5 text-zinc-500" />
-            {t.narativeTitle}
+            {t.achievementsTitle || "Core Milestones"}
           </h2>
-          <div className="space-y-5">
-            {data.overview.map((paragraph, index) => (
-              <p key={index} id={`bio-paragraph-${index}`} className="text-sm md:text-[15px] font-medium text-zinc-300 leading-relaxed tracking-tight">
-                {paragraph}
-              </p>
-            ))}
-          </div>
-        </div>
 
-        {/* Achievements highlights list */}
-        <div id="achievements-strip" className="flex flex-wrap gap-2.5 pt-6 border-t border-white/5 relative z-10">
-          {data.achievements.map((ach, idx) => (
-            <div key={idx} id={`badge-${idx}`} className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/5">
-              <span className="w-1.5 h-1.5 rounded-full bg-orange-500 flex-shrink-0" />
-              <span className="text-[11px] font-medium tracking-tight text-zinc-300">{ach}</span>
-            </div>
-          ))}
+          {/* Achievements highlights list rendered prominently instead of text wall */}
+          <nav aria-label="Achievements Overview" id="achievements-strip" className="flex flex-col gap-3 flex-1 justify-center relative z-10">
+            {data.achievements.map((ach, idx) => (
+              <div key={idx} id={`badge-${idx}`} className="flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                <div className="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center flex-shrink-0">
+                  <span className="w-2 h-2 rounded-full bg-orange-500" />
+                </div>
+                <span className="text-base font-semibold tracking-tight text-white">{ach}</span>
+              </div>
+            ))}
+          </nav>
         </div>
 
         {/* Decorative background glow */}
         <div className="absolute right-[-10%] top-[-10%] w-64 h-64 rounded-full bg-orange-500/10 filter blur-[80px] pointer-events-none" />
-      </div>
+      </article>
 
       {/* Key Strengths Dashboard (Right) */}
-      <div id="bento-strengths" className="lg:col-span-5 bg-zinc-900/40 backdrop-blur-md border border-white/5 rounded-3xl p-6 md:p-8 flex flex-col justify-between gap-5 relative group/strengths shadow-[inset_0_1px_0px_rgba(255,255,255,0.05)]">
+      <article id="bento-strengths" className="lg:col-span-5 bg-zinc-900/40 backdrop-blur-md border border-white/5 rounded-3xl p-6 md:p-8 flex flex-col justify-between gap-5 relative group/strengths shadow-[inset_0_1px_0px_rgba(255,255,255,0.05)]">
         <div className="space-y-4 relative z-10 text-left">
           <h2 className="text-[10px] font-medium tracking-widest text-zinc-400 uppercase flex items-center gap-1.5">
             <ShieldCheck className="w-3.5 h-3.5 text-zinc-500" />
@@ -102,7 +97,7 @@ export function OverviewBento({ data, lang }: { data: PortfolioData; lang: Langu
         </div>
         {/* Ambient decorative spot background */}
         <div className="absolute left-[-10%] bottom-[-10%] w-48 h-48 rounded-full bg-orange-500/10 filter blur-[80px] pointer-events-none" />
-      </div>
-    </div>
+      </article>
+    </section>
   );
 }

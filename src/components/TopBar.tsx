@@ -5,7 +5,7 @@ import { translations, Language } from "../translations";
 export function TopBar({ lang, setLang }: { lang: Language; setLang: (lang: Language) => void }) {
   const t = translations[lang];
   return (
-    <div id="top-teal-bar" className="w-full bg-zinc-900 border-b border-zinc-800/60 px-4 py-2 sm:px-6 md:px-8 flex items-center justify-between text-[11px] font-mono tracking-wider text-zinc-400 select-none">
+    <nav id="top-teal-bar" aria-label="System status and language selection" className="w-full bg-zinc-900 border-b border-zinc-800/60 px-4 py-2 sm:px-6 md:px-8 flex items-center justify-between text-[11px] font-mono tracking-wider text-zinc-400 select-none">
       <div className="flex items-center gap-3">
         <span className="flex items-center gap-1.5 text-orange-400 font-bold">
           <Activity className="w-3.5 h-3.5 animate-pulse" />
@@ -26,6 +26,7 @@ export function TopBar({ lang, setLang }: { lang: Language; setLang: (lang: Lang
               setLang("en");
               localStorage.setItem("nxstep_portfolio_lang", "en");
             }}
+            aria-label="Switch language to English"
             className={`px-2 py-0.5 rounded text-[10px] font-bold font-mono transition-all ${
               lang === "en" ? "bg-orange-500 text-black font-black shadow-sm" : "text-zinc-500 hover:text-zinc-300"
             }`}
@@ -37,6 +38,7 @@ export function TopBar({ lang, setLang }: { lang: Language; setLang: (lang: Lang
               setLang("uk");
               localStorage.setItem("nxstep_portfolio_lang", "uk");
             }}
+            aria-label="Switch language to Ukrainian"
             className={`px-2 py-0.5 rounded text-[10px] font-bold font-mono transition-all ${
               lang === "uk" ? "bg-orange-500 text-black font-black shadow-sm" : "text-zinc-500 hover:text-zinc-300"
             }`}
@@ -45,6 +47,6 @@ export function TopBar({ lang, setLang }: { lang: Language; setLang: (lang: Lang
           </button>
         </div>
       </div>
-    </div>
+    </nav>
   );
 }

@@ -6,7 +6,7 @@ export const translations = {
     hubTitle: "NXSTEP // OFFICIAL RECRUIT HUB",
     hubStatus: "V1.27 • STABLE COMPETITIVE setup ACTIVE",
     faceitVerified: "FACEIT VERIFIED",
-    narativeTitle: "Player Narrative & Competitive Evolution",
+    achievementsTitle: "Core Milestones",
     specialtiesTitle: "Key Player Specialties & Tactical Roles",
     activeGoal: "Active Development Goal:",
     activeGoalDesc: "Refining strategic systems, rotational timing, and professional strategic spacing plans.",
@@ -164,7 +164,7 @@ export const translations = {
     competitiveAscent: "Competitive Ascent",
 
     // Scout AI UI Keys
-    scoutGreeting: "Hello! I am the Scouting AI Co-pilot for NxStep. I have analyzed his FACEIT matches, ELO statistics, map position expertise (Ancient Mid, Mirage Connector, Nuke Outside), and tryout logs.\n\nYou can ask me: How did he grind ELO on a laptop? Analyze his team-coordination skills? What is his tactical role on Ancient? How can we contact him? Ask me anything!",
+    scoutGreeting: "Hello! I am the Scouting AI Co-pilot for NxStep. I have analyzed his FACEIT matches, ELO statistics, map position expertise (Ancient Mid, Mirage Connector, Nuke Outside), and tryout logs.",
     sugLabel1: "How did he hit 3700+ ELO on a laptop?",
     sugText1: "How did NxStep achieve Challenger 3700 ELO playing on a standard laptop with unstable Wi-Fi? Describe this climb.",
     sugLabel2: "Ancient/Mirage Role",
@@ -211,7 +211,7 @@ export const translations = {
     hubTitle: "NXSTEP // ОФІЦІЙНИЙ СКАУТ-ХАБ",
     hubStatus: "v1.27 • ПІДКЛЮЧЕНО СТАБІЛЬНУ КІБЕРСПОРТИВНУ ЗБІРКУ",
     faceitVerified: "FACEIT ПІДТВЕРДЖЕНО",
-    narativeTitle: "Історія гравця та професійна еволюція",
+    achievementsTitle: "Ключові досягнення",
     specialtiesTitle: "Зв'язки та тактичні ролі гравця",
     activeGoal: "Активна мета розвитку:",
     activeGoalDesc: "Покращення командних тактик, таймінгів ротації та позиційної дисципліни.",
@@ -369,7 +369,7 @@ export const translations = {
     competitiveAscent: "Турнірний підйом",
 
     // Scout AI UI Keys
-    scoutGreeting: "Вітаю! Я ІІ-Асистент зі скаутингу (Scouting AI Co-pilot) для NxStep. Я детально проаналізував його FACEIT матчі, ELO-статистику, позиції на картах (Ancient Mid, Mirage Connector, Nuke Outside) та досвід проходження тріалів.\n\nВи можете запитати мене: Як він підняв ELO на ноутбуці? Проаналізуй його зіграність у команді? Яка його роль на Ancient? Як з ним зв'язатися? Поставте будь-яке запитання!",
+    scoutGreeting: "Вітаю! Я ІІ-Асистент зі скаутингу (Scouting AI Co-pilot) для NxStep. Я детально проаналізував його FACEIT матчі, ELO-статистику, позиції на картах (Ancient Mid, Mirage Connector, Nuke Outside) та досвід проходження тріалів.",
     sugLabel1: "Як він взяв 3700+ ELO на ноутбуці?",
     sugText1: "Як NxStep вдалося взяти Challenger 3700 ELO граючи на звичайному ноутбуці з нестабільним Wi-Fi? Опиши цей стрибок.",
     sugLabel2: "Роль на Ancient / Mirage",

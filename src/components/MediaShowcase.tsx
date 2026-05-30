@@ -21,9 +21,9 @@ export function MediaShowcase({ data, lang = "en" }: { data: PortfolioData; lang
   };
 
   return (
-    <div id="media-showcase-container" className="w-full flex flex-col gap-6 text-left">
+    <section aria-labelledby="media-title" id="media-showcase-container" className="w-full flex flex-col gap-6 text-left">
       {/* Header section */}
-      <div className="flex flex-col gap-4">
+      <header className="flex flex-col gap-4">
         <div id="media-header" className="flex items-start justify-between relative">
           <div>
             <h2 id="media-title" className="text-xl sm:text-2xl font-bold font-sans text-white flex items-center gap-2">
@@ -40,7 +40,7 @@ export function MediaShowcase({ data, lang = "en" }: { data: PortfolioData; lang
         </div>
 
         {/* Media Category Buttons */}
-        <div id="media-tabs" className="flex items-center gap-1.5 p-1 bg-zinc-900 border border-zinc-800 rounded-lg overflow-x-auto no-scrollbar max-w-full snap-x snap-mandatory">
+        <nav aria-label="Media Categories" id="media-tabs" className="flex items-center gap-1.5 p-1 bg-zinc-900 border border-zinc-800 rounded-lg overflow-x-auto no-scrollbar max-w-full snap-x snap-mandatory">
           <button
             id="media-tab-highlights"
             onClick={() => setActiveMediaTab("highlights")}
@@ -77,15 +77,16 @@ export function MediaShowcase({ data, lang = "en" }: { data: PortfolioData; lang
             <Database className="w-4 h-4" />
             {t.povDemosTab}
           </button>
-        </div>
-      </div>
+        </nav>
+      </header>
 
       {/* Grid of Active Media items */}
-      <div id="media-cards-grid" className="grid grid-cols-1 md:grid-cols-2 gap-5 text-left">
+      <div role="list" id="media-cards-grid" className="grid grid-cols-1 md:grid-cols-2 gap-5 text-left">
         {activeCollection.map((item, idx) => {
           return (
-            <div
+            <article
               key={item.title + idx}
+              role="listitem"
               id={`media-card-${idx}`}
               className="bg-zinc-950/45 border border-zinc-800/80 rounded-xl p-5 relative overflow-hidden flex flex-col justify-between hover:border-zinc-700/80 transition-all group"
             >
@@ -134,6 +135,7 @@ export function MediaShowcase({ data, lang = "en" }: { data: PortfolioData; lang
                   <a
                     id={`media-ext-link-${idx}`}
                     href={item.url}
+                    aria-label={`View ${item.title}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 px-4 py-2 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 text-zinc-350 hover:text-white rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors font-sans"
@@ -144,6 +146,7 @@ export function MediaShowcase({ data, lang = "en" }: { data: PortfolioData; lang
 
                   <button
                     id={`media-copy-btn-${idx}`}
+                    aria-label={`Copy link for ${item.title}`}
                     onClick={() => handleCopyLink(item.url, idx)}
                     className="p-2 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 text-zinc-400 hover:text-white rounded-lg transition-colors flex items-center justify-center gap-1.5"
                     title="Copy demo link"
@@ -163,10 +166,10 @@ export function MediaShowcase({ data, lang = "en" }: { data: PortfolioData; lang
                   </button>
                 </div>
               </div>
-            </div>
+            </article>
           );
         })}
       </div>
-    </div>
+    </section>
   );
 }
