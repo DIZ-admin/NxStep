@@ -1,8 +1,14 @@
-import { ChatMessage, PlayerStats } from "../types";
+import { ChatMessage } from "../types";
 
 export interface SyncFaceitResponse {
   success: boolean;
-  stats?: PlayerStats;
+  username?: string;
+  avatarUrl?: string;
+  coverImageUrl?: string;
+  elo?: number | null;
+  level?: number | null;
+  segments?: any[];
+  stats?: any;
   error?: string;
 }
 

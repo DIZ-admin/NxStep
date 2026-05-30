@@ -150,17 +150,31 @@ export const nxstepPortfolioData: PortfolioData = {
   experience: [
     {
       type: "team",
-      name: "[Your Team Name]",
-      roleOrResult: "Your Role (e.g., Entry / Active Rifler)",
-      periodOrScore: "Your Record or Period",
-      details: "Provide details about your actual team or league experience here, and I will update it. E.g., 'Acted as key opening space maker...'"
+      name: "tokyo54 (stand-in)",
+      roleOrResult: "Active Rifler",
+      periodOrScore: "UKIC Masters Season 9",
+      details: "Competed as a stand-in rifler against elite regional rosters, adapting quickly to the team's tactical setups and mid-round calls."
+    },
+    {
+      type: "team",
+      name: "hellwave",
+      roleOrResult: "Rifler / Playmaker",
+      periodOrScore: "UESF Stage 2",
+      details: "Played as an active playmaker in the national UESF stage, securing vital openings and contributing to team-wide macro success."
+    },
+    {
+      type: "team",
+      name: "lviv shadows (stand-in)",
+      roleOrResult: "Entry / Rifler",
+      periodOrScore: "UESF Stage 1",
+      details: "Stepped in to assist the roster under competitive match conditions, maintaining clean communication and strong individual damage outputs."
     },
     {
       type: "trial",
-      name: "[Your Scrim / Trial History]",
-      roleOrResult: "Your Role",
-      periodOrScore: "Result",
-      details: "List any relevant academy tests, mix scrims, or trials you have played recently."
+      name: "B8 Prospects & Inner Circle Prospects",
+      roleOrResult: "Trial Rifler",
+      periodOrScore: "Tactical Scrims & Evaluations",
+      details: "Underwent rigorous trial matches and tactical assessments, benchmarking mechanics and communication against high-tier prospects."
     }
   ],
   links: {
@@ -336,17 +350,31 @@ export const nxstepPortfolioDataUK: PortfolioData = {
   experience: [
     {
       type: "team",
-      name: "[Назва вашої команди / Досвід]",
-      roleOrResult: "Ваша роль (напр. Опенер)",
-      periodOrScore: "Період або рекорд",
-      details: "Будь ласка, розкажіть про ваш реальний змагальний досвід, і я оновлю це поле."
+      name: "tokyo54 (stand-in)",
+      roleOrResult: "Активний Райфлер",
+      periodOrScore: "UKIC Masters Season 9",
+      details: "Виступав у ролі стенд-іна у престижному британському дивізіоні, швидко пристосувавшись до командних тактик та підтримуючої комунікації."
+    },
+    {
+      type: "team",
+      name: "hellwave",
+      roleOrResult: "Райфлер / Плеймейкер",
+      periodOrScore: "UESF Stage 2",
+      details: "Брав участь у національних змаганнях UESF Stage 2 у складі згуртованого колективу, забезпечуючи стабільний вогневий внесок."
+    },
+    {
+      type: "team",
+      name: "lviv shadows (stand-in)",
+      roleOrResult: "Опенер / Райфлер",
+      periodOrScore: "UESF Stage 1",
+      details: "Заміняв основного гравця у змагальних матчах першої фази, зберігаючи високу індивідуальну шкоду та стійкі таймінги."
     },
     {
       type: "trial",
-      name: "[Тестування / Праки]",
-      roleOrResult: "Позиція",
-      periodOrScore: "Результати тестування",
-      details: "Вкажіть команди або академії, де ви проходили тести чи грали праки."
+      name: "Тести у B8 Prospects та Inner Circle Prospects",
+      roleOrResult: "Тестовий Райфлер",
+      periodOrScore: "Тактичні праки та оцінки",
+      details: "Проходив детальні тестування та скрими, порівнюючи власні навички з досвідченими кадрами Східної Європи та отримавши позитивний фідбек від тренерів."
     }
   ],
   links: {

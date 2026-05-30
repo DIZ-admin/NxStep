@@ -19,12 +19,36 @@ service cloud.firestore {
         data.createdAt is timestamp;
     }
 
+    function isValidFaceitRecord(data) {
+      return data.keys().hasAll(['username', 'elo', 'level', 'avatarUrl', 'coverImageUrl', 'stats', 'segments', 'syncedAt']) &&
+        data.keys().size() == 8 &&
+        data.username is string && data.username.size() <= 100 &&
+        (data.elo == null || data.elo is int) &&
+        (data.level == null || data.level is int) &&
+        data.avatarUrl is string && data.avatarUrl.size() <= 2000 &&
+        data.coverImageUrl is string && data.coverImageUrl.size() <= 2000 &&
+        data.stats is map &&
+        data.segments is list &&
+        data.syncedAt is timestamp;
+    }
+
     match /scoutSessions/{sessionId} {
       allow read: if isSignedIn() && isValidId(sessionId) && existing().userId == request.auth.uid;
       allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
       allow create: if isSignedIn() && isValidId(sessionId) && isValidScoutSession(incoming()) && incoming().createdAt == request.time;
       allow update: if isSignedIn() && isValidId(sessionId) && existing().userId == request.auth.uid && isValidScoutSession(incoming()) && incoming().createdAt == existing().createdAt;
       allow delete: if isSignedIn() && isValidId(sessionId) && existing().userId == request.auth.uid;
+    }
+
+    match /faceitStats/{username} {
+      allow read: if true;
+      allow write: if isSignedIn() && isValidId(username) && isValidFaceitRecord(incoming()) && incoming().syncedAt == request.time;
+    }
+
+    match /faceitHistory/{historyId} {
+      allow read: if true;
+      allow create: if isSignedIn() && isValidId(historyId) && isValidFaceitRecord(incoming()) && incoming().syncedAt == request.time;
+      allow delete, update: if false;
     }
   }
 }

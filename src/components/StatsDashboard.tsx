@@ -7,6 +7,7 @@ import { LobbyContrastPanel } from "./StatsDashboard/LobbyContrastPanel";
 import { usePortfolio } from "../contexts/PortfolioContext";
 import { useLanguage } from "../contexts/LanguageContext";
 import { apiClient } from "../api";
+import { firebaseService } from "../services/firebaseService";
 
 export function StatsDashboard() {
   const { data, updateData: onUpdateData } = usePortfolio();
@@ -34,7 +35,19 @@ export function StatsDashboard() {
             ...cleanedStats
           }
         });
-        addToast("success", "FACEIT Synced", "Successfully pulled the latest data.");
+
+        // Parse and persist results in our Firebase Firestore database
+        await firebaseService.saveFaceitStats(
+          result.username || "NxStep",
+          result.elo ?? null,
+          result.level ?? null,
+          result.avatarUrl ?? "",
+          result.coverImageUrl ?? "",
+          result.stats,
+          result.segments || []
+        );
+
+        addToast("success", "FACEIT Synced", "Successfully pulled and recorded latest data.");
       } else {
         addToast("error", "FACEIT Sync Failed", result.error || "Unable to sync data");
       }
