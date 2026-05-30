@@ -18,13 +18,28 @@ describe('TabHub Component', () => {
     // Initial tab
     expect(screen.getByRole('tab', { name: /COMBAT STATS/i })).toBeInTheDocument();
     
-    // Switch to another tab
+    // Switch to Map Pool
     act(() => {
       screen.getByRole('tab', { name: /MAP POOL/i }).click();
     });
     
+    // Switch to Trials & Teams
+    act(() => {
+      screen.getByRole('tab', { name: /TRIALS & TEAMS|Тести та команди/i }).click();
+    });
+
+    // Switch to Demos & VODs
+    act(() => {
+      screen.getByRole('tab', { name: /DEMOS & VODS|Записи та кліпи/i }).click();
+    });
+
+    // Switch back to Combat Stats
+    act(() => {
+      screen.getByRole('tab', { name: /COMBAT STATS/i }).click();
+    });
+
     await act(async () => {
-       await new Promise(resolve => setTimeout(resolve, 100)); // wait for suspense
+       await new Promise(resolve => setTimeout(resolve, 50));
     });
   });
 });

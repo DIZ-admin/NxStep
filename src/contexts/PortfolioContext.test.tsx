@@ -12,8 +12,8 @@ vi.mock('firebase/firestore', () => ({
   doc: vi.fn(),
   collection: vi.fn(),
   query: vi.fn(),
-  getDoc: vi.fn(),
-  getDocs: vi.fn()
+  getDoc: vi.fn(() => Promise.resolve({ exists: () => false, data: () => ({}) })),
+  getDocs: vi.fn(() => Promise.resolve({ forEach: vi.fn() }))
 }));
 
 const TestComponent = () => {

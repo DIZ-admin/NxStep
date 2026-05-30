@@ -91,6 +91,62 @@ describe('StatsDashboard Component', () => {
     expect(await screen.findByText('FACEIT Synced')).toBeInTheDocument();
   });
 
+  it('syncs faceit data successfully with incremental matches when no last sync exists', async () => {
+    const mockReponse = { success: true, stats: { matches: 500, elo: 3500 }, username: 'NxStep' };
+    (apiClient.syncFaceitStats as any).mockResolvedValueOnce(mockReponse);
+    (apiClient.fetchFaceitHistory as any).mockResolvedValueOnce({
+      success: true,
+      matches: [{ matchId: '12345', date: Date.now(), map: 'de_mirage', kills: 23, deaths: 11, kd: 2.1, result: 'W' }]
+    });
+
+    render(<StatsDashboard />);
+    
+    act(() => {
+      screen.getByText('Sync FACEIT').click();
+    });
+
+    await act(async () => {
+       await new Promise(resolve => setTimeout(resolve, 50));
+    });
+
+    expect(await screen.findByText('FACEIT Synced')).toBeInTheDocument();
+  });
+
+  it('handles incremental match sync errors gracefully and allows stats to preserve', async () => {
+    const mockReponse = { success: true, stats: { matches: 500, elo: 3500 }, username: 'NxStep' };
+    (apiClient.syncFaceitStats as any).mockResolvedValueOnce(mockReponse);
+    (apiClient.fetchFaceitHistory as any).mockRejectedValueOnce(new Error('History sync offline'));
+
+    render(<StatsDashboard />);
+    
+    act(() => {
+      screen.getByText('Sync FACEIT').click();
+    });
+
+    await act(async () => {
+       await new Promise(resolve => setTimeout(resolve, 50));
+    });
+
+    expect(await screen.findByText('FACEIT Synced')).toBeInTheDocument();
+  });
+
+  it('handles failed faceit syncing cleanly', async () => {
+    const mockReponse = { success: false, error: 'Cloudflare blocked manual sync' };
+    (apiClient.syncFaceitStats as any).mockResolvedValueOnce(mockReponse);
+
+    render(<StatsDashboard />);
+    
+    act(() => {
+      screen.getByText('Sync FACEIT').click();
+    });
+
+    await act(async () => {
+       await new Promise(resolve => setTimeout(resolve, 50));
+    });
+
+    expect(await screen.findByText('FACEIT Sync Failed')).toBeInTheDocument();
+  });
+
   it('handles faceit data sync error', async () => {
     (apiClient.syncFaceitStats as any).mockRejectedValueOnce(new Error('Network Error'));
 
